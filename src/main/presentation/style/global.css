@@ -118,3 +118,53 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* Scrollbar Geral */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+/* Fundo do Scroll (Track) */
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* Barra (Thumb) - Tema Claro */
+::-webkit-scrollbar-thumb {
+  background-color: #d1d5db; /* gray-300 */
+  border-radius: 9999px;
+  border: 2px solid transparent;
+  background-clip: content-box;
+}
+
+/* Hover - Tema Claro */
+::-webkit-scrollbar-thumb:hover {
+  background-color: #9ca3af; /* gray-400 */
+}
+
+/* 🌑 Tema Escuro */
+.dark ::-webkit-scrollbar-thumb {
+  background-color: #4b5563; /* gray-600 */
+}
+
+.dark ::-webkit-scrollbar-thumb:hover {
+  background-color: #6b7280; /* gray-500 */
+}
+
+.material-symbols-outlined {
+  font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+}
+
+.item-row-desktop {
+  display: grid;
+  grid-template-columns: auto 1fr repeat(4, minmax(0, auto)) auto;
+  align-items: center;
+  gap: 1rem;
+}
+
+.item-row-desktop .item-name {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
