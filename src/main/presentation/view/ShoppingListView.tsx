@@ -1,7 +1,7 @@
 import { Sidebar } from "../sidebar/sidebar";
 import { ItemList } from "../item-list/item-list";
-import { ItemForm } from "../ShoppingList/ItemForm";
 import { useShoppingList } from "@/main/providers/shopping-list/ShoppingListContext";
+import { ItemForm } from "../item-form/ItemForm";
 
 
 export default function ShoppingListView() {
