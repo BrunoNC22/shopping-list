@@ -9,6 +9,7 @@ import { createLocalGetAllCategories } from "../usecases/LocalGetAllCategoriesFa
 import { createLocalGetTotalByCategory } from "../usecases/LocalGetTotalByCategoryFactory";
 import { useEffect, useState } from "react";
 import { MobileShoppingListView } from "@/main/presentation/view/MobileShoppingListView";
+import { createLocalGetItemsByCategory } from "../usecases/LocalGetItemsByCategoryFactory";
 
 const CreateShoppingListView = () => {
 
@@ -31,6 +32,7 @@ const CreateShoppingListView = () => {
         removeItem={createLocalRemoveItem()}
         toggleIsChecked={createLocalToggleIsChecked()}
         getTotalByCategory={createLocalGetTotalByCategory()}
+        getItemsByCategory={createLocalGetItemsByCategory()}
       >
         {isMobile ? <MobileShoppingListView /> : <ShoppingListView />}
       </ShoppingListProvider>

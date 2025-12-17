@@ -1,4 +1,5 @@
 import type { AddItemProps } from "@/domain/input/AddItemInputPort";
+import type { ItemsByCategoryResponseItem } from "@/domain/input/GetItemsByCategoryInputPort";
 import type { GetTotalByCategoryResponseItem } from "@/domain/input/GetTotalByCategoryInputPort";
 import type Item from "@/domain/models/Item";
 import { createContext, useContext } from "react";
@@ -13,6 +14,7 @@ export interface IShoppingListContext {
   items: Item[] | null
   totalValue: string
   totalByCategory: GetTotalByCategoryResponseItem[]
+  itemsByCategory: ItemsByCategoryResponseItem[]
 }
 
 export const ShoppingListContext = createContext<IShoppingListContext | null>(null)

@@ -1,9 +1,8 @@
-import { Badge } from "@/components/ui/badge";
 import { useShoppingList } from "@/main/providers/shopping-list/ShoppingListContext";
 import { MobileItemForm } from "../item-form/mobile-item-form";
 
 export const MobileShoppingListView = () => {
-  const { items, totalValue, totalByCategory, addItem, removeItem } = useShoppingList();
+  const { totalValue, addItem, removeItem, itemsByCategory } = useShoppingList();
 
   return (
     <div className="bg-background-dark font-display">
@@ -19,14 +18,6 @@ export const MobileShoppingListView = () => {
           </button>
         </header>
         <main className="flex flex-1 flex-col px-4 pt-2">
-          <div className="flex gap-3 overflow-x-auto pb-4 [-ms-overflow-style:none] [scrollbar-width:none]">
-            {totalByCategory.map((totalByCategoryItem, i) => (
-              <Badge key={i} className="bg-secondary">
-                {totalByCategoryItem.categoryName} R${" "}
-                {totalByCategoryItem.total.toFixed(2)}
-              </Badge>
-            ))}
-          </div>
 
           <MobileItemForm
             onSubmit={async (formItem) =>
@@ -39,32 +30,38 @@ export const MobileShoppingListView = () => {
             }
           />
           <div className="flex flex-col gap-3 pb-32">
-            {items &&
-              items.map((item) => (
-                <div
-                  key={item.id}
-                  className="flex items-center justify-between rounded-xl bg-card/60 p-4"
-                >
-                  <div className="flex flex-col">
-                    <p className="text-base font-semibold text-white">
-                      {item.name}
-                    </p>
-                    <p className="text-sm text-gray-400">
-                      {item.amount} un. x R$ {item.price.toFixed(2)}
-                    </p>
-                  </div>
-                  <div className="flex items-center gap-4">
-                    <p className="text-lg font-bold text-white">
-                      R$ {(item.amount * item.price).toFixed(2)}
-                    </p>
-                    <button className="flex h-8 w-8 items-center justify-center rounded-lg bg-background-dark">
-                      <span onClick={() => removeItem(item.id)} className="material-symbols-outlined text-xl text-gray-400">
-                        delete
-                      </span>
-                    </button>
-                  </div>
+            {itemsByCategory.map(responseItem => (
+              <div className="flex flex-col gap-3 pb-8" key={responseItem.category.id}>
+                <p>{responseItem.category.nome} R$ {responseItem.totalValue.toFixed(2)}</p>
+                <div className="flex flex-col gap-2">
+                  {responseItem.items.map(item => (
+                    <div
+                      key={item.id}
+                      className="flex items-center justify-between rounded-xl bg-card/60 p-4"
+                    >
+                      <div className="flex flex-col">
+                        <p className="text-base font-semibold text-white">
+                          {item.name}
+                        </p>
+                        <p className="text-sm text-gray-400">
+                          {item.amount} un. x R$ {item.price.toFixed(2)}
+                        </p>
+                      </div>
+                      <div className="flex items-center gap-4">
+                        <p className="text-lg font-bold text-white">
+                          R$ {(item.amount * item.price).toFixed(2)}
+                        </p>
+                        <button className="flex h-8 w-8 items-center justify-center rounded-lg bg-background-dark">
+                          <span onClick={() => removeItem(item.id)} className="material-symbols-outlined text-xl text-gray-400">
+                            delete
+                          </span>
+                        </button>
+                      </div>
+                    </div>
+                  ))}
                 </div>
-              ))}
+              </div>
+            ))}
           </div>
         </main>
 
