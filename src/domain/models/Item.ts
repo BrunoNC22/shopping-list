@@ -10,6 +10,7 @@ export default class Item {
 
   constructor(
     id: string,
+    readonly itemListId: string,
     name: string,
     price: number,
     amount: number,
