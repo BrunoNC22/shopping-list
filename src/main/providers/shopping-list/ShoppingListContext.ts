@@ -5,13 +5,13 @@ import type Item from "@/domain/models/Item";
 import { createContext, useContext } from "react";
 
 export interface IShoppingListContext {
-  addItem(props: AddItemProps): Promise<void>
+  addItem(props: Omit<AddItemProps, 'itemListId'>): Promise<void>
   removeItem(itemId: string): Promise<void>
-  loadItems(): Promise<void>
+  getItemListByItemListId(): Promise<void>
   toggleIsChecked(itemId: string): Promise<void>
   isLoading: boolean
   isReloading: boolean
-  items: Item[] | null
+  items: Readonly<Item[]> | null
   totalValue: string
   totalByCategory: GetTotalByCategoryResponseItem[]
   itemsByCategory: ItemsByCategoryResponseItem[]

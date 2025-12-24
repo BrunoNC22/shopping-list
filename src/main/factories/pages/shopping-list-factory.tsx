@@ -1,4 +1,3 @@
-import { createLocalLoadItems } from "../usecases/LocalLoadItemsFactory";
 import { createLocalRemoveItem } from "../usecases/LocalRemoveItemFactory";
 import { createLocalAddItem } from "../usecases/LocalAddItemFactory";
 import { createLocalToggleIsChecked } from "../usecases/LocalToggleIsCheckedFactory";
@@ -10,6 +9,7 @@ import { createLocalGetTotalByCategory } from "../usecases/LocalGetTotalByCatego
 import { useEffect, useState } from "react";
 import { MobileShoppingListView } from "@/main/presentation/view/MobileShoppingListView";
 import { createLocalGetItemsByCategory } from "../usecases/LocalGetItemsByCategoryFactory";
+import { createLocalGetItemListByItemListId } from "../usecases/LocalGetItemListByItemListIdFactory";
 
 const CreateShoppingListView = () => {
 
@@ -28,7 +28,7 @@ const CreateShoppingListView = () => {
     <CategoriesProvider getAllCategoriesUsecase={createLocalGetAllCategories()}>
       <ShoppingListProvider
         addItem={createLocalAddItem()}
-        loadItems={createLocalLoadItems()}
+        getItemListByItemListId={createLocalGetItemListByItemListId()}
         removeItem={createLocalRemoveItem()}
         toggleIsChecked={createLocalToggleIsChecked()}
         getTotalByCategory={createLocalGetTotalByCategory()}

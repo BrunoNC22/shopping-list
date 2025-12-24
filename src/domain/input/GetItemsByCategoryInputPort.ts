@@ -7,6 +7,10 @@ export type ItemsByCategoryResponseItem = {
   totalValue: number
 }
 
+export type GetItemsByCategoryProps = {
+  itemListId: string
+}
+
 export interface GetItemsByCategoryInputPort {
-  perform(): Promise<ItemsByCategoryResponseItem[]>
+  perform(props: GetItemsByCategoryProps): Promise<ItemsByCategoryResponseItem[]>
 }

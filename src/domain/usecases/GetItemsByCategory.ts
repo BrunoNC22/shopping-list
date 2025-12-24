@@ -1,11 +1,11 @@
-import type { GetItemsByCategoryInputPort, ItemsByCategoryResponseItem } from "../input/GetItemsByCategoryInputPort";
-import type { GetAllItemsPersisterOutputPort } from "../output/persistance/ItemPersisterOutputPort";
+import type { GetItemsByCategoryInputPort, GetItemsByCategoryProps, ItemsByCategoryResponseItem } from "../input/GetItemsByCategoryInputPort";
+import type { getByItemListIdItemPersisterOutputPort } from "../output/persistance/ItemPersisterOutputPort";
 
 export class GetItemsByCategory implements GetItemsByCategoryInputPort {
-  constructor(private readonly itemPersister: GetAllItemsPersisterOutputPort) {}
+  constructor(private readonly itemPersister: getByItemListIdItemPersisterOutputPort) {}
 
-  async perform(): Promise<ItemsByCategoryResponseItem[]> {
-    const items = await this.itemPersister.getAll()
+  async perform(props: GetItemsByCategoryProps): Promise<ItemsByCategoryResponseItem[]> {
+    const items = await this.itemPersister.getByItemListId(props.itemListId)
     if (items.length === 0) return []
 
     const itemsMap: Record<string, ItemsByCategoryResponseItem> = {}

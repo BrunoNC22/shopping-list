@@ -3,7 +3,7 @@ import type Item from "@/domain/models/Item";
 import { useShoppingList } from "@/main/providers/shopping-list/ShoppingListContext";
 
 type Props = {
-  items: Item[]
+  items: Readonly<Item[]>
   totalValue: string
 }
 

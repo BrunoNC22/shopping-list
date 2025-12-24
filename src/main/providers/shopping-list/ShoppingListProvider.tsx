@@ -7,15 +7,16 @@ import {
 } from "react";
 import type Item from "@/domain/models/Item";
 import { ShoppingListContext } from "./ShoppingListContext";
-import type LoadItemsInputPort from "@/domain/input/LoadItemsInputPort";
 import type RemoveItemInputPort from "@/domain/input/RemoveItemInputPort";
 import type { AddItemInputPort, AddItemProps } from "@/domain/input/AddItemInputPort";
 import type { ToggleIsCheckedInputPort } from "@/domain/input/ToggleIsCheckedInputPort";
 import type { GetTotalByCategoryInputPort, GetTotalByCategoryResponseItem } from "@/domain/input/GetTotalByCategoryInputPort";
 import type { GetItemsByCategoryInputPort, ItemsByCategoryResponseItem } from "@/domain/input/GetItemsByCategoryInputPort";
+import { useParams } from "react-router";
+import type { GetItemListByItemListId } from "@/domain/usecases/GetItemListByItemListId";
 
 type ShoppingListProviderProps = {
-  loadItems: LoadItemsInputPort;
+  getItemListByItemListId: GetItemListByItemListId;
   removeItem: RemoveItemInputPort;
   addItem: AddItemInputPort;
   toggleIsChecked: ToggleIsCheckedInputPort;
@@ -26,13 +27,14 @@ type ShoppingListProviderProps = {
 export const ShoppingListProvider = ({
   children,
   addItem,
-  loadItems,
+  getItemListByItemListId,
   removeItem,
   toggleIsChecked,
   getTotalByCategory,
   getItemsByCategory
 }: PropsWithChildren & ShoppingListProviderProps) => {
-  const [itemList, setItemList] = useState<Item[] | null>(null);
+  const { listId } = useParams()
+  const [itemList, setItemList] = useState<Readonly<Item[]> | null>(null);
   const [isReloading, setIsReloading] = useState<boolean>(false)
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [totalByCategory, setTotalByCategory] = useState<GetTotalByCategoryResponseItem[]>([])
@@ -48,9 +50,10 @@ export const ShoppingListProvider = ({
 
   const handleGetItemsByCategory = useCallback(
     async () => {
-      setItemsByCategory(await getItemsByCategory.perform())
+      if (!listId) return
+      setItemsByCategory(await getItemsByCategory.perform({ itemListId: listId }))
     },
-    [getItemsByCategory]
+    [getItemsByCategory, listId]
   )
 
   const handleGetTotalByCategory = useCallback(
@@ -60,47 +63,56 @@ export const ShoppingListProvider = ({
     [getTotalByCategory]
   )
 
-  const handleLoadItems = useCallback(async () => {
+  const handleGetItemListByItemListId = useCallback(async () => {
+    if (!listId) throw new Error("list id must be not nullish.")
+
     if (itemList) setIsReloading(true)
     if (!itemList) setIsLoading(true)
-    const items = await loadItems.perform();
-    setItemList(items);
+    const items = await getItemListByItemListId.perform({ itemListId: listId });
+    setItemList(items.getItems());
     setIsReloading(false)
     setIsLoading(false)
-  }, [loadItems, itemList]);
+  }, [getItemListByItemListId, itemList, listId]);
 
   const handleRemoveItem = useCallback(
     async (itemId: string) => {
       await removeItem.perform({ itemId });
-      await handleLoadItems();
+      await handleGetItemListByItemListId();
       handleGetTotalByCategory()
       handleGetItemsByCategory()
     },
-    [removeItem, handleLoadItems, handleGetTotalByCategory, handleGetItemsByCategory]
+    [removeItem, handleGetItemListByItemListId, handleGetTotalByCategory, handleGetItemsByCategory]
   );
 
   const handleAddItem = useCallback(
-    async (props: AddItemProps) => {
-      await addItem.perform(props);
-      await handleLoadItems();
+    async (props: Omit<AddItemProps, 'itemListId'>) => {
+      if (!listId) return
+      await addItem.perform({
+        amount: props.amount,
+        categoryId: props.categoryId,
+        itemListId: listId,
+        name: props.name,
+        price: props.price
+      });
+      await handleGetItemListByItemListId();
       handleGetTotalByCategory()
       handleGetItemsByCategory()
     },
-    [addItem, handleLoadItems, handleGetTotalByCategory, handleGetItemsByCategory]
+    [addItem, handleGetItemListByItemListId, handleGetTotalByCategory, handleGetItemsByCategory, listId]
   );
 
   const handleToggleIsChecked = useCallback(
     async (itemId: string) => {
       await toggleIsChecked.perform({ itemId });
-      await handleLoadItems();
+      await handleGetItemListByItemListId();
     },
-    [toggleIsChecked, handleLoadItems]
+    [toggleIsChecked, handleGetItemListByItemListId]
   );
 
   
 
   useEffect(() => {
-    handleLoadItems();
+    handleGetItemListByItemListId();
     handleGetTotalByCategory()
     handleGetItemsByCategory()
     handleGetItemsByCategory()
@@ -109,7 +121,7 @@ export const ShoppingListProvider = ({
     <ShoppingListContext.Provider value={{
       addItem: handleAddItem,
       removeItem: handleRemoveItem,
-      loadItems: handleLoadItems,
+      getItemListByItemListId: handleGetItemListByItemListId,
       toggleIsChecked: handleToggleIsChecked,
       isLoading,
       isReloading,

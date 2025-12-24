@@ -6,6 +6,7 @@ import { useItemListform } from "@/main/hooks/useItemListForm"
 import { useItemLists } from "@/main/providers/item-list/ItemListsContext"
 import { Calendar, Plus, ShoppingCart } from "lucide-react"
 import { useMemo, useState } from "react"
+import { Link } from "react-router"
 
 export const MobileHome = () => {
   const { itemLists, createItemList } = useItemLists()
@@ -44,7 +45,8 @@ export const MobileHome = () => {
         </header>
         <div className="flex-1 flex flex-col gap-2 overflow-y-auto pb-32 px-4 pt-6 space-y-6">
           {itemLists.map((itemList) => (
-            <div
+            <Link
+              to={`/listas/${itemList.id}`}
               key={itemList.id}
               className="group flex items-center gap-3 bg-card hover:bg-card/10 active:scale-[0.99] transition-all duration-200 rounded-lg p-3 border border-white/5 shadow-card cursor-pointer">
               <div className="size-10 shrink-0 rounded-full flex items-center justify-center bg-primary/20 text-primary">
@@ -72,7 +74,7 @@ export const MobileHome = () => {
                   <div className="bg-emerald-500 h-full rounded-full" style={{ width: "70%" }}></div>
                 </div> */}
               </div>
-            </div>
+            </Link>
           ))}
         </div>
         <div className="fixed bottom-12 left-0 right-0 z-30 flex justify-center pointer-events-none">
