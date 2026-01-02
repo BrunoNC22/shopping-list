@@ -48,6 +48,14 @@ export class LocalItemListPersister implements ItemListPersisterOutputPort {
     await this.cacheStorage.set('itemList', storageItemList)
   }
 
+  async delete(listId: string): Promise<void> {
+    const storageItemLists = await this.findAllOrThrow()
+    
+    const filteredItemList = storageItemLists.filter((storageItemList) => storageItemList.id !== listId)
+
+    await this.cacheStorage.set('itemList', filteredItemList)
+  }
+
   private convertDomainItemListToStorage(itemList: ItemList): StorageItemList {
     return {
       createdAt: itemList.createdAt.toISOString(),

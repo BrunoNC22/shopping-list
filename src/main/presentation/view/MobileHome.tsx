@@ -10,7 +10,7 @@ import { useMemo, useState } from "react"
 import { Link } from "react-router"
 
 export const MobileHome = () => {
-  const { itemLists, createItemList } = useItemLists()
+  const { itemLists, createItemList, deleteItemList } = useItemLists()
   const [isOpen, setIsOpen] = useState(false)
   const {
     isSubmiting,
@@ -93,7 +93,10 @@ export const MobileHome = () => {
                           <Pen />  
                           Editar
                         </DropdownMenuItem>
-                        <DropdownMenuItem variant="destructive">
+                        <DropdownMenuItem 
+                          variant="destructive"
+                          onSelect={() => deleteItemList({ itemListId: itemList.id })}
+                        >
                           <Trash2 />
                           Excluir
                         </DropdownMenuItem>

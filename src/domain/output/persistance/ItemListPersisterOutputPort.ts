@@ -12,7 +12,12 @@ export interface GetItemListPersisterOutputPort {
   get(listId: string): Promise<ItemList>
 }
 
+export interface DeleteItemListPersisterOutputPort {
+  delete(listId: string): Promise<void>
+}
+
 export interface ItemListPersisterOutputPort extends 
   SaveItemListPersisterOutputPort, 
   GetItemListPersisterOutputPort,
-  GetAllItemListsPersisterOutputPort {}
+  GetAllItemListsPersisterOutputPort,
+  DeleteItemListPersisterOutputPort {}
