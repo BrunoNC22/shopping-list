@@ -1,8 +1,12 @@
 import { useShoppingList } from "@/main/providers/shopping-list/ShoppingListContext";
 import { MobileItemForm } from "../item-form/mobile-item-form";
+import { Button } from "@/components/ui/button";
+import { useDrawer } from "@/main/providers/drawer/DrawerContext";
 
 export const MobileShoppingListView = () => {
   const { totalValue, addItem, removeItem, itemsByCategory } = useShoppingList();
+
+  const { openDrawer } = useDrawer()
 
   return (
     <div className="bg-background-dark font-display">
@@ -18,17 +22,6 @@ export const MobileShoppingListView = () => {
           </button>
         </header>
         <main className="flex flex-1 flex-col px-4 pt-2">
-
-          <MobileItemForm
-            onSubmit={async (formItem) =>
-              await addItem({
-                amount: formItem.itemAmount,
-                categoryId: formItem.itemCategoryId,
-                name: formItem.itemName,
-                price: formItem.itemValue,
-              })
-            }
-          />
           <div className="flex flex-col gap-3 pb-32">
             {itemsByCategory.map(responseItem => (
               <div className="flex flex-col gap-3 pb-8" key={responseItem.category.id}>
@@ -65,8 +58,8 @@ export const MobileShoppingListView = () => {
           </div>
         </main>
 
-        <footer className="fixed bottom-0 left-0 right-0 z-10 p-4">
-          <div className="neon-shadow-subtle mx-auto flex max-w-md items-center justify-between rounded-xl border border-primary/20 bg-surface-dark/80 p-4 backdrop-blur-sm">
+        <footer className="fixed bottom-0 left-0 right-0 z-10 p-4 flex gap-3 items-center">
+          <div className="neon-shadow-subtle flex-1 flex max-w-md items-center justify-between rounded-xl border border-primary/20 bg-surface-dark/80 p-4 backdrop-blur-sm">
             <span className="text-base font-semibold uppercase tracking-wider text-gray-300">
               Total
             </span>
@@ -74,6 +67,30 @@ export const MobileShoppingListView = () => {
               R$ {totalValue}
             </span>
           </div>
+          <Button
+            onClick={() => {
+              openDrawer(
+                (close) => (
+                  <MobileItemForm
+                    onSubmit={async (formItem) => {
+                      await addItem({
+                        amount: formItem.itemAmount,
+                        categoryId: formItem.itemCategoryId,
+                        name: formItem.itemName,
+                        price: formItem.itemValue,
+                      })
+                      close()
+                    }}
+                  />
+                ),
+                "Adicionar Item",
+                "Adicione um Item a lista de compras."
+              )
+            }} 
+            size={"lg"}
+          >
+            Adicionar Item
+          </Button>
         </footer>
       </div>
     </div>
