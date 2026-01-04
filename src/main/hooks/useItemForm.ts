@@ -43,12 +43,6 @@ export const useItemForm = ({ onSubmit }: ItemFormProps) => {
     }, [setItemName, setItemValue, setItemAmount]);
   
     const submitItem = useCallback(async () => {
-      console.log("payload", {
-        itemAmount: Number(itemAmount),
-        itemName,
-        itemValue: Number(itemValue),
-        itemCategoryId: categoryId
-      })
       if (!validate()) return;
       
       setIsSubmitting(true);
