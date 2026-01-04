@@ -2,11 +2,12 @@ import type { CreateItemListProps } from "@/domain/input/CreateItemListInputPort
 import { useCallback, useState } from "react"
 
 type UseItemListformProps = {
-  submitFn: (props: CreateItemListProps) => Promise<void> | void
+  submitFn: (props: CreateItemListProps) => Promise<void> | void,
+  itemListName?: string
 }
 
-export const useItemListform = ({ submitFn }: UseItemListformProps) => {
-  const [itemListName, setItemListName] = useState<string>("")
+export const useItemListform = ({ submitFn, itemListName: defaultItemListName }: UseItemListformProps) => {
+  const [itemListName, setItemListName] = useState<string>(defaultItemListName ?? "")
   const [isSubmiting, setIsSubmiting] = useState<boolean>(false)
 
   const resetForm = useCallback(() => {

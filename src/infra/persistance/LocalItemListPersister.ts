@@ -41,11 +41,16 @@ export class LocalItemListPersister implements ItemListPersisterOutputPort {
   }
 
   async save(itemList: ItemList): Promise<void> {
-    const storageItemList = await this.findAllOrThrow()
+    const storageItemLists = await this.findAllOrThrow()
+    const foundIndex = storageItemLists.findIndex((storageItemList) => storageItemList.id === itemList.id)
 
-    storageItemList.push(this.convertDomainItemListToStorage(itemList))
+    if (foundIndex >= 0) {
+      storageItemLists[foundIndex] = this.convertDomainItemListToStorage(itemList)
+    } else {
+      storageItemLists.push(this.convertDomainItemListToStorage(itemList))
+    }
 
-    await this.cacheStorage.set('itemList', storageItemList)
+    await this.cacheStorage.set('itemList', storageItemLists)
   }
 
   async delete(listId: string): Promise<void> {

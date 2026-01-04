@@ -1,5 +1,6 @@
 import type { CreateItemListProps } from "@/domain/input/CreateItemListInputPort";
 import type { DeleteItemListProps } from "@/domain/input/DeleteItemListInputPort";
+import type { EditItemListProps } from "@/domain/input/EditItemListInputPort";
 import type ItemList from "@/domain/models/ItemList";
 import { createContext, useContext } from "react";
 
@@ -7,8 +8,8 @@ interface IItemListsContext {
   itemLists: ItemList[]
   createItemList: (props: CreateItemListProps) => Promise<void>
   deleteItemList: (props: DeleteItemListProps) => Promise<void>
+  editItemList: (props: EditItemListProps) => Promise<void>
 }
-
 
 export const ItemListsContext = createContext<IItemListsContext | null>(null)
 

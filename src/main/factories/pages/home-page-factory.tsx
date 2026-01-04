@@ -3,6 +3,7 @@ import { createLocalCreateItemListFactory } from "../usecases/LocalCreateItemLis
 import { createLocalGetAllItemLists } from "../usecases/LocalGetAllItemListsFactory"
 import { MobileHome } from "@/main/presentation/view/MobileHome"
 import { createLocalDeleteItemListFactory } from "../usecases/LocalDeleteItemListFactory"
+import { createLocalEditItemListFactory } from "../usecases/LocalEditItemListFactory"
 
 export const CreateHomePageFactory = () => {
   return (
@@ -10,6 +11,7 @@ export const CreateHomePageFactory = () => {
       createItemList={createLocalCreateItemListFactory()} 
       getItemLists={createLocalGetAllItemLists()}
       deleteItemList={createLocalDeleteItemListFactory()}
+      editItemList={createLocalEditItemListFactory()}
     >
       <MobileHome />
     </ItemListsProvider>
