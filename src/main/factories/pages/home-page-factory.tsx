@@ -4,6 +4,7 @@ import { createLocalGetAllItemLists } from "../usecases/LocalGetAllItemListsFact
 import { MobileHome } from "@/main/presentation/view/MobileHome"
 import { createLocalDeleteItemListFactory } from "../usecases/LocalDeleteItemListFactory"
 import { createLocalEditItemListFactory } from "../usecases/LocalEditItemListFactory"
+import { DrawerProvider } from "@/main/providers/drawer/DrawerProvider"
 
 export const CreateHomePageFactory = () => {
   return (
@@ -13,7 +14,9 @@ export const CreateHomePageFactory = () => {
       deleteItemList={createLocalDeleteItemListFactory()}
       editItemList={createLocalEditItemListFactory()}
     >
-      <MobileHome />
+      <DrawerProvider>
+        <MobileHome />
+      </DrawerProvider>
     </ItemListsProvider>
   )
 }

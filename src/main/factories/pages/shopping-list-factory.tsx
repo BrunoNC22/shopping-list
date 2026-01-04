@@ -10,6 +10,7 @@ import { useEffect, useState } from "react";
 import { MobileShoppingListView } from "@/main/presentation/view/MobileShoppingListView";
 import { createLocalGetItemsByCategory } from "../usecases/LocalGetItemsByCategoryFactory";
 import { createLocalGetItemListByItemListId } from "../usecases/LocalGetItemListByItemListIdFactory";
+import { DrawerProvider } from "@/main/providers/drawer/DrawerProvider";
 
 const CreateShoppingListView = () => {
 
@@ -34,7 +35,9 @@ const CreateShoppingListView = () => {
         getTotalByCategory={createLocalGetTotalByCategory()}
         getItemsByCategory={createLocalGetItemsByCategory()}
       >
-        {isMobile ? <MobileShoppingListView /> : <ShoppingListView />}
+        <DrawerProvider>
+          {isMobile ? <MobileShoppingListView /> : <ShoppingListView />}
+        </DrawerProvider>
       </ShoppingListProvider>
     </CategoriesProvider>
   );
