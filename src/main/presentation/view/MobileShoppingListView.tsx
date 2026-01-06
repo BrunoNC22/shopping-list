@@ -29,7 +29,7 @@ export const MobileShoppingListView = () => {
                 {responseItem.items.map(item => (
                   <div
                     key={item.id}
-                    className="flex items-center justify-between rounded-xl bg-card/60 p-4"
+                    className="flex items-center justify-between rounded-xl bg-card p-4"
                   >
                     <div className="flex flex-col">
                       <p className="text-base font-semibold text-white">
