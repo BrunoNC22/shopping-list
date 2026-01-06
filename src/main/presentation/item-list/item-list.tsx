@@ -8,14 +8,15 @@ type Props = {
 }
 
 export const ItemList = ({ items, totalValue }: Props) => {
-  const { removeItem, toggleIsChecked, totalByCategory } = useShoppingList()
+  const { removeItem, toggleIsChecked, totalByCategory, shoppingListName } = useShoppingList()
 
   return (
     <main className="flex-1 p-6 overflow-y-auto">
       <div className="flex flex-col gap-6 max-w-7xl mx-auto">
         <div className="flex flex-wrap justify-between items-center gap-6">
           <div className="flex flex-col gap-5">
-            <p className="text-foreground text-4xl font-black leading-tight tracking-[-0.033em]">Lista Semanal
+            <p className="text-foreground text-4xl font-black leading-tight tracking-[-0.033em]">
+              {shoppingListName}
             </p>
             <div className="flex gap-3">
               {totalByCategory.map((totalByCategoryItem, i) => (

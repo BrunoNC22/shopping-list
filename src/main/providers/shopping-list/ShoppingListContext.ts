@@ -15,6 +15,7 @@ export interface IShoppingListContext {
   totalValue: string
   totalByCategory: GetTotalByCategoryResponseItem[]
   itemsByCategory: ItemsByCategoryResponseItem[]
+  shoppingListName: string
 }
 
 export const ShoppingListContext = createContext<IShoppingListContext | null>(null)

@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { useDrawer } from "@/main/providers/drawer/DrawerContext";
 
 export const MobileShoppingListView = () => {
-  const { totalValue, addItem, removeItem, itemsByCategory } = useShoppingList();
+  const { totalValue, addItem, removeItem, itemsByCategory, shoppingListName } = useShoppingList();
 
   const { openDrawer } = useDrawer()
 
@@ -12,7 +12,7 @@ export const MobileShoppingListView = () => {
     <div className="relative flex h-screen w-full flex-col text-white">
       <header className="sticky top-0 z-10 flex items-center justify-between bg-background-dark/80 p-4 pb-2 backdrop-blur-sm">
         <h1 className="text-xl font-bold leading-tight tracking-[-0.015em]">
-          Lista de Compras
+          {shoppingListName}
         </h1>
         <button className="flex h-10 w-10 cursor-pointer items-center justify-center rounded-full">
           <span className="material-symbols-outlined text-3xl">

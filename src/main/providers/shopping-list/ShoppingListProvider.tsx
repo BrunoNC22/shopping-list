@@ -39,6 +39,7 @@ export const ShoppingListProvider = ({
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [totalByCategory, setTotalByCategory] = useState<GetTotalByCategoryResponseItem[]>([])
   const [itemsByCategory, setItemsByCategory] = useState<ItemsByCategoryResponseItem[]>([])
+  const [shoppingListName, setShoppingListName] = useState<string>("")
 
 
   const totalValue = useMemo(() => {
@@ -69,6 +70,7 @@ export const ShoppingListProvider = ({
     if (itemList) setIsReloading(true)
     if (!itemList) setIsLoading(true)
     const items = await getItemListByItemListId.perform({ itemListId: listId });
+    setShoppingListName(items.name)
     setItemList(items.getItems());
     setIsReloading(false)
     setIsLoading(false)
@@ -115,7 +117,6 @@ export const ShoppingListProvider = ({
     handleGetItemListByItemListId();
     handleGetTotalByCategory()
     handleGetItemsByCategory()
-    handleGetItemsByCategory()
   }, []);
   return (
     <ShoppingListContext.Provider value={{
@@ -128,7 +129,8 @@ export const ShoppingListProvider = ({
       items: itemList,
       totalValue,
       totalByCategory,
-      itemsByCategory
+      itemsByCategory,
+      shoppingListName
     }}>
       {children}
     </ShoppingListContext.Provider>
