@@ -23,10 +23,13 @@ export class LocalItemPersisterAdapter implements ItemPersisterOutputPort {
 
   async save(item: Item): Promise<void> {
     const receivedItems = await this.getAllItemsOrThrow()
+    const foundIndex = receivedItems.findIndex((storageItem) => storageItem.id === item.id)
 
-    const newStorageItem = this.parseItem(item)
-
-    receivedItems.push(newStorageItem)
+    if (foundIndex >= 0) {
+      receivedItems[foundIndex] = this.parseItem(item)
+    } else {
+      receivedItems.push(this.parseItem(item))
+    }
   
     await this.cacheStorage.set('items', receivedItems)
   }

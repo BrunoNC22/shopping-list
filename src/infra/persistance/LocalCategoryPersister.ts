@@ -57,8 +57,13 @@ export class LocalCategoryPersister implements CategoryPersisterOutputPort {
 
   async save(category: Categoria): Promise<void> {
     const categories = await this.cacheStorage.get<StorageCategory[]>('categories')
-
-    categories.push(this.parseDomainCategory(category))
+    const foundIndex = categories.findIndex((storageCategory) => storageCategory.id === category.id)
+    
+    if (foundIndex >= 0) {
+      categories[foundIndex] = this.parseDomainCategory(category)
+    } else {
+      categories.push(this.parseDomainCategory(category))
+    }
 
     await this.cacheStorage.set('categories', categories)
   }
