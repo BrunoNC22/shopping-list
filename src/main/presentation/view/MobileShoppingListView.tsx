@@ -10,7 +10,7 @@ export const MobileShoppingListView = () => {
 
   return (
     <div className="relative flex h-screen w-full flex-col text-white">
-      <header className="sticky top-0 z-10 flex items-center justify-between bg-background-dark/80 p-4 pb-2 backdrop-blur-sm">
+      <header className="sticky top-0 z-10 flex items-center justify-between bg-background-dark/80 p-4 pb-2 backdrop-blur-xs">
         <h1 className="text-xl font-bold leading-tight tracking-[-0.015em]">
           {shoppingListName}
         </h1>
