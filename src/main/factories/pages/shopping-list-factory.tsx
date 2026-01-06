@@ -11,6 +11,7 @@ import { MobileShoppingListView } from "@/main/presentation/view/MobileShoppingL
 import { createLocalGetItemsByCategory } from "../usecases/LocalGetItemsByCategoryFactory";
 import { createLocalGetItemListByItemListId } from "../usecases/LocalGetItemListByItemListIdFactory";
 import { DrawerProvider } from "@/main/providers/drawer/DrawerProvider";
+import { createLocalCreateCategoryFactory } from "../usecases/LocalCreateCategoryFactory";
 
 const CreateShoppingListView = () => {
 
@@ -26,7 +27,10 @@ const CreateShoppingListView = () => {
   }, []);
 
   return (
-    <CategoriesProvider getAllCategoriesUsecase={createLocalGetAllCategories()}>
+    <CategoriesProvider 
+      getAllCategoriesUsecase={createLocalGetAllCategories()}
+      createCategoryUsecase={createLocalCreateCategoryFactory()}
+    >
       <ShoppingListProvider
         addItem={createLocalAddItem()}
         getItemListByItemListId={createLocalGetItemListByItemListId()}

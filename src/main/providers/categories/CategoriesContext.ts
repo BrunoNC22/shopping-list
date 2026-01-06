@@ -1,9 +1,11 @@
+import type { CreateCategoryProps } from "@/domain/input/CreateCategoryInputPort";
 import type { Categoria } from "@/domain/models/Categoria";
 import { createContext, useContext } from "react";
 
 export interface ICategoriesContext {
   categories: Categoria[] | null
   isLoading: boolean
+  createCategory: (props: CreateCategoryProps) => Promise<string>
 }
 
 export const CategoriesContext = createContext<ICategoriesContext | null>(null)

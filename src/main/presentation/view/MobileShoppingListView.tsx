@@ -70,17 +70,19 @@ export const MobileShoppingListView = () => {
           onClick={() => {
             openDrawer(
               (close) => (
-                <MobileItemForm
-                  onSubmit={async (formItem) => {
-                    await addItem({
-                      amount: formItem.itemAmount,
-                      categoryId: formItem.itemCategoryId,
-                      name: formItem.itemName,
-                      price: formItem.itemValue,
-                    })
-                    close()
-                  }}
-                />
+                <div className="max-h-[60vh] overflow-y-auto">
+                  <MobileItemForm
+                    onSubmit={async (formItem) => {
+                      await addItem({
+                        amount: formItem.itemAmount,
+                        categoryId: formItem.itemCategoryId,
+                        name: formItem.itemName,
+                        price: formItem.itemValue,
+                      })
+                      close()
+                    }}
+                  />
+                </div>
               ),
               "Adicionar Item",
               "Adicione um Item a lista de compras."
