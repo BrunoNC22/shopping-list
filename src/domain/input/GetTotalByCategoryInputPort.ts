@@ -4,6 +4,10 @@ export type GetTotalByCategoryResponseItem = {
   total: number
 }
 
+export type GetTotalByCategoryProps = {
+  itemListId: string
+}
+
 export interface GetTotalByCategoryInputPort {
-  perform(): Promise<GetTotalByCategoryResponseItem[]>
+  perform(props: GetTotalByCategoryProps): Promise<GetTotalByCategoryResponseItem[]>
 }

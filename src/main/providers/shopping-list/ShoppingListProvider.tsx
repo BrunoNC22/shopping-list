@@ -59,9 +59,10 @@ export const ShoppingListProvider = ({
 
   const handleGetTotalByCategory = useCallback(
     async () => {
-      setTotalByCategory(await getTotalByCategory.perform())
+      if (!listId) return
+      setTotalByCategory(await getTotalByCategory.perform({ itemListId: listId }))
     },
-    [getTotalByCategory]
+    [getTotalByCategory, listId]
   )
 
   const handleGetItemListByItemListId = useCallback(async () => {

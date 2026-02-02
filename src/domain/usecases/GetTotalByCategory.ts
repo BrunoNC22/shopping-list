@@ -1,11 +1,11 @@
-import type { GetTotalByCategoryInputPort, GetTotalByCategoryResponseItem } from "../input/GetTotalByCategoryInputPort";
-import type { GetAllItemsPersisterOutputPort } from "../output/persistance/ItemPersisterOutputPort";
+import type { GetTotalByCategoryInputPort, GetTotalByCategoryProps, GetTotalByCategoryResponseItem } from "../input/GetTotalByCategoryInputPort";
+import type { getByItemListIdItemPersisterOutputPort } from "../output/persistance/ItemPersisterOutputPort";
 
 export class GetTotalByCategory implements GetTotalByCategoryInputPort {
-  constructor(private readonly itemPersister: GetAllItemsPersisterOutputPort) {}
+  constructor(private readonly itemPersister: getByItemListIdItemPersisterOutputPort) {}
 
-  async perform(): Promise<GetTotalByCategoryResponseItem[]> {
-    const items = await this.itemPersister.getAll()
+  async perform(props: GetTotalByCategoryProps): Promise<GetTotalByCategoryResponseItem[]> {
+    const items = await this.itemPersister.getByItemListId(props.itemListId)
     if (items.length === 0) return []
 
     const map: Record<string, GetTotalByCategoryResponseItem> = {}
