@@ -40,9 +40,6 @@ export const Sidebar = () => {
               className="flex items-center gap-2 p-2 rounded-lg bg-primary/20 text-primary font-medium hover:bg-primary/30 transition-colors"
               href="#"
             >
-              <span className="material-symbols-outlined text-base">
-                format_list_bulleted
-              </span>
               <span>Lista Semanal</span>
               <span className="ml-auto text-xs bg-primary px-2 py-0.5 rounded-full text-background">
                 {items ? items.length : 0}
@@ -54,9 +51,6 @@ export const Sidebar = () => {
               className="flex items-center gap-2 p-2 rounded-lg text-slate-300 hover:bg-white/5 transition-colors"
               href="#"
             >
-              <span className="material-symbols-outlined text-base">
-                shopping_bag
-              </span>
               <span>Churrasco</span>
               <span className="ml-auto text-xs bg-border px-2 py-0.5 rounded-full text-slate-400">
                 3
@@ -68,7 +62,6 @@ export const Sidebar = () => {
               className="flex items-center gap-2 p-2 rounded-lg text-slate-300 hover:bg-white/5 transition-colors"
               href="#"
             >
-              <span className="material-symbols-outlined text-base">home</span>
               <span>Casa e Jardim</span>
               <span className="ml-auto text-xs bg-border px-2 py-0.5 rounded-full text-slate-400">
                 2
@@ -77,7 +70,6 @@ export const Sidebar = () => {
           </li>
           <li>
             <button className="flex items-center gap-2 p-2 rounded-lg text-slate-300 hover:bg-white/5 transition-colors w-full">
-              <span className="material-symbols-outlined text-base">add</span>
               <span>Nova Lista</span>
             </button>
           </li>
@@ -91,9 +83,6 @@ export const Sidebar = () => {
               className="flex items-center gap-2 p-2 rounded-lg text-slate-300 hover:bg-white/5 transition-colors"
               href="#"
             >
-              <span className="material-symbols-outlined text-base text-primary">
-                circle
-              </span>
               <span>Mercearia</span>
             </a>
           </li>
@@ -102,9 +91,6 @@ export const Sidebar = () => {
               className="flex items-center gap-2 p-2 rounded-lg text-slate-300 hover:bg-white/5 transition-colors"
               href="#"
             >
-              <span className="material-symbols-outlined text-base text-green-400">
-                circle
-              </span>
               <span>Carnes</span>
             </a>
           </li>
@@ -113,15 +99,11 @@ export const Sidebar = () => {
               className="flex items-center gap-2 p-2 rounded-lg text-slate-300 hover:bg-white/5 transition-colors"
               href="#"
             >
-              <span className="material-symbols-outlined text-base text-purple-400">
-                circle
-              </span>
               <span>Limpeza</span>
             </a>
           </li>
           <li>
             <button className="flex items-center gap-2 p-2 rounded-lg text-slate-300 hover:bg-white/5 transition-colors w-full">
-              <span className="material-symbols-outlined text-base">add</span>
               <span>Nova Categoria</span>
             </button>
           </li>
