@@ -107,9 +107,10 @@ export const ShoppingListProvider = ({
   const handleToggleIsChecked = useCallback(
     async (itemId: string) => {
       await toggleIsChecked.perform({ itemId });
-      await handleGetItemListByItemListId();
+      handleGetItemListByItemListId();
+      handleGetItemsByCategory()
     },
-    [toggleIsChecked, handleGetItemListByItemListId]
+    [toggleIsChecked, handleGetItemListByItemListId, handleGetItemsByCategory]
   );
 
   

@@ -2,22 +2,24 @@ import { useShoppingList } from "@/main/providers/shopping-list/ShoppingListCont
 import { MobileItemForm } from "../item-form/mobile-item-form";
 import { Button } from "@/components/ui/button";
 import { useDrawer } from "@/main/providers/drawer/DrawerContext";
+import { EllipsisVertical, Pen, Trash2, UserCircle2 } from "lucide-react"
+import { CheckboxIcon } from "../checkbox/checkbox-icon";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+
 
 export const MobileShoppingListView = () => {
-  const { totalValue, addItem, removeItem, itemsByCategory, shoppingListName } = useShoppingList();
+  const { totalValue, addItem, itemsByCategory, shoppingListName, toggleIsChecked, removeItem } = useShoppingList();
 
   const { openDrawer } = useDrawer()
 
   return (
     <div className="relative flex h-screen w-full flex-col text-white">
-      <header className="sticky top-0 z-10 flex items-center justify-between bg-background/50 p-4 pb-2 backdrop-blur-xs">
+      <header className="sticky top-0 z-10 flex items-center justify-between bg-background/50 p-4 backdrop-blur-xs">
         <h1 className="text-xl font-bold leading-tight tracking-[-0.015em]">
           {shoppingListName}
         </h1>
         <button className="flex h-10 w-10 cursor-pointer items-center justify-center rounded-full">
-          <span className="material-symbols-outlined text-3xl">
-            account_circle
-          </span>
+          <UserCircle2 />
         </button>
       </header>
       <main className="flex h-[100vh] flex-col px-4 pt-2">
@@ -29,25 +31,57 @@ export const MobileShoppingListView = () => {
                 {responseItem.items.map(item => (
                   <div
                     key={item.id}
-                    className="flex items-center justify-between rounded-xl bg-card p-4"
+                    className={`flex justify-between rounded-xl bg-card p-4 pr-0 gap-3 transition-opacity ${item.checked ? 'opacity-75' : ''}`}
                   >
-                    <div className="flex flex-col">
-                      <p className="text-base font-semibold text-white">
+                    <div className="flex flex-col min-w-0">
+                      <p className="text-base font-semibold text-white text-wrap break-words">
                         {item.name}
                       </p>
                       <p className="text-sm text-gray-400">
                         {item.amount} un. x R$ {item.price.toFixed(2)}
                       </p>
                     </div>
-                    <div className="flex items-center gap-4">
-                      <p className="text-lg font-bold text-white">
-                        R$ {(item.amount * item.price).toFixed(2)}
-                      </p>
-                      <button className="flex h-8 w-8 items-center justify-center rounded-lg bg-background-dark">
-                        <span onClick={() => removeItem(item.id)} className="material-symbols-outlined text-xl text-gray-400">
-                          delete
-                        </span>
-                      </button>
+                    <div className="flex flex-col">
+                      
+                      <div className="flex items-center gap-4">
+                        <p className="text-lg font-bold text-white text-nowrap">
+                          R$ {(item.amount * item.price).toFixed(2)}
+                        </p>
+                        <CheckboxIcon checked={item.checked} onChange={() => toggleIsChecked(item.id)} />
+                        <DropdownMenu>
+                          <DropdownMenuTrigger asChild>
+                            <Button 
+                              size={"icon"} 
+                              variant={"ghost"} 
+                              className="shrink-0" 
+                              onClick={(e) => {
+                                e.preventDefault()
+                                e.stopPropagation()
+                              }
+                            }>
+                              <EllipsisVertical />
+                            </Button>
+                          </DropdownMenuTrigger>
+                          <DropdownMenuContent onClick={(e) => {
+                            e.preventDefault()
+                            e.stopPropagation()
+                          }}>
+                            <DropdownMenuLabel>Ações</DropdownMenuLabel>
+                            <DropdownMenuSeparator />
+                            <DropdownMenuItem >
+                              <Pen />  
+                              Editar
+                            </DropdownMenuItem>
+                            <DropdownMenuItem 
+                              variant="destructive"
+                              onSelect={() => removeItem(item.id)}
+                            >
+                              <Trash2 />
+                              Excluir
+                            </DropdownMenuItem>
+                          </DropdownMenuContent>
+                        </DropdownMenu>
+                      </div>
                     </div>
                   </div>
                 ))}
