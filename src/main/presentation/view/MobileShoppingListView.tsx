@@ -8,7 +8,15 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel,
 
 
 export const MobileShoppingListView = () => {
-  const { totalValue, addItem, itemsByCategory, shoppingListName, toggleIsChecked, removeItem } = useShoppingList();
+  const {
+    totalValue,
+    addItem,
+    itemsByCategory,
+    shoppingListName,
+    toggleIsChecked,
+    removeItem,
+    editItem
+  } = useShoppingList();
 
   const { openDrawer } = useDrawer()
 
@@ -68,7 +76,26 @@ export const MobileShoppingListView = () => {
                           }}>
                             <DropdownMenuLabel>Ações</DropdownMenuLabel>
                             <DropdownMenuSeparator />
-                            <DropdownMenuItem >
+                            <DropdownMenuItem 
+                              onSelect={() => {
+                                openDrawer((close) => (
+                                  <MobileItemForm 
+                                    onSubmit={async (formItem) => {
+                                      await editItem({
+                                        itemId: item.id,
+                                        itemListId: item.itemListId,
+                                        amount: formItem.itemAmount,
+                                        categoryId: formItem.itemCategoryId,
+                                        name: formItem.itemName,
+                                        value: formItem.itemValue
+                                      })
+                                      close()
+                                    }}
+                                    defaultItem={item}
+                                  />
+                                ))
+                              }}
+                            >
                               <Pen />  
                               Editar
                             </DropdownMenuItem>

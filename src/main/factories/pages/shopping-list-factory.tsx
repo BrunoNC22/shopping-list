@@ -12,6 +12,7 @@ import { createLocalGetItemsByCategory } from "../usecases/LocalGetItemsByCatego
 import { createLocalGetItemListByItemListId } from "../usecases/LocalGetItemListByItemListIdFactory";
 import { DrawerProvider } from "@/main/providers/drawer/DrawerProvider";
 import { createLocalCreateCategoryFactory } from "../usecases/LocalCreateCategoryFactory";
+import { createLocalEditItemFactory } from "../usecases/LocalEditItemFactory";
 
 const CreateShoppingListView = () => {
 
@@ -33,6 +34,7 @@ const CreateShoppingListView = () => {
     >
       <ShoppingListProvider
         addItem={createLocalAddItem()}
+        editItem={createLocalEditItemFactory()}
         getItemListByItemListId={createLocalGetItemListByItemListId()}
         removeItem={createLocalRemoveItem()}
         toggleIsChecked={createLocalToggleIsChecked()}

@@ -14,6 +14,7 @@ import type { GetTotalByCategoryInputPort, GetTotalByCategoryResponseItem } from
 import type { GetItemsByCategoryInputPort, ItemsByCategoryResponseItem } from "@/domain/input/GetItemsByCategoryInputPort";
 import { useParams } from "react-router";
 import type { GetItemListByItemListId } from "@/domain/usecases/GetItemListByItemListId";
+import type { EditIntemInputPort, EditItemProps } from "@/domain/input/EditItemInputPort";
 
 type ShoppingListProviderProps = {
   getItemListByItemListId: GetItemListByItemListId;
@@ -22,6 +23,7 @@ type ShoppingListProviderProps = {
   toggleIsChecked: ToggleIsCheckedInputPort;
   getTotalByCategory: GetTotalByCategoryInputPort
   getItemsByCategory: GetItemsByCategoryInputPort
+  editItem: EditIntemInputPort
 };
 
 export const ShoppingListProvider = ({
@@ -31,7 +33,8 @@ export const ShoppingListProvider = ({
   removeItem,
   toggleIsChecked,
   getTotalByCategory,
-  getItemsByCategory
+  getItemsByCategory,
+  editItem
 }: PropsWithChildren & ShoppingListProviderProps) => {
   const { listId } = useParams()
   const [itemList, setItemList] = useState<Readonly<Item[]> | null>(null);
@@ -113,7 +116,14 @@ export const ShoppingListProvider = ({
     [toggleIsChecked, handleGetItemListByItemListId, handleGetItemsByCategory]
   );
 
-  
+  const handleEditItem = useCallback(
+    async (props: EditItemProps) => {
+      await editItem.perform(props)
+      handleGetItemListByItemListId();
+      handleGetItemsByCategory()
+    },
+    [editItem, handleGetItemListByItemListId, handleGetItemsByCategory]
+  )
 
   useEffect(() => {
     handleGetItemListByItemListId();
@@ -123,6 +133,7 @@ export const ShoppingListProvider = ({
   return (
     <ShoppingListContext.Provider value={{
       addItem: handleAddItem,
+      editItem: handleEditItem,
       removeItem: handleRemoveItem,
       getItemListByItemListId: handleGetItemListByItemListId,
       toggleIsChecked: handleToggleIsChecked,

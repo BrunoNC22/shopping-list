@@ -1,13 +1,14 @@
 import { Button } from "@/components/ui/button";
+import type Item from "@/domain/models/Item";
 import { useItemForm, type FormItem } from "@/main/hooks/useItemForm";
 import { useCategories } from "@/main/providers/categories/CategoriesContext";
 import { useCallback, useState } from "react";
 
 type ItemFormProps = {
   onSubmit: (formItem: FormItem) => Promise<unknown> | unknown;
-
+  defaultItem?: Item
 };
-export const MobileItemForm = ({ onSubmit }: ItemFormProps) => {
+export const MobileItemForm = ({ onSubmit, defaultItem }: ItemFormProps) => {
   const {
     itemAmount,
     setItemAmount,
@@ -19,7 +20,13 @@ export const MobileItemForm = ({ onSubmit }: ItemFormProps) => {
     isSubmitting,
     categoryId,
     setCategoryId
-  } = useItemForm({ onSubmit })
+  } = useItemForm({
+    onSubmit,
+    itemAmount: defaultItem?.amount,
+    itemCategoryId: defaultItem?.category.id,
+    itemName: defaultItem?.name,
+    itemValue: defaultItem?.price
+  })
 
   const { categories, createCategory } = useCategories()
 
@@ -142,7 +149,7 @@ export const MobileItemForm = ({ onSubmit }: ItemFormProps) => {
         disabled={isSubmitting}
         className="neon-shadow mt-2 flex h-14 w-full cursor-pointer items-center justify-center rounded-xl bg-primary text-base font-bold leading-normal text-white"
       >
-        Adicionar Item
+        {defaultItem ? 'Editar Item' : 'Adicionar Item'}
       </button>
     </div>
   );

@@ -7,15 +7,21 @@ export type FormItem = {
   itemCategoryId: string
 };
 
-type ItemFormProps = {
+interface ItemFormProps extends Partial<FormItem> {
   onSubmit: (formItem: FormItem) => Promise<unknown> | unknown;
 };
 
-export const useItemForm = ({ onSubmit }: ItemFormProps) => {
-    const [itemName, setItemName] = useState<string>("");
-    const [itemValue, setItemValue] = useState<string>("");
-    const [itemAmount, setItemAmount] = useState<string>("");
-    const [categoryId, setCategoryId] = useState<string>("")
+export const useItemForm = ({ 
+  onSubmit,
+  itemAmount: defaultItemAmount,
+  itemCategoryId,
+  itemName: defaultItemName,
+  itemValue: defaultItemValue
+}: ItemFormProps) => {
+    const [itemName, setItemName] = useState<string>(defaultItemName ?? "");
+    const [itemValue, setItemValue] = useState<string>(defaultItemValue ? String(defaultItemValue) : "");
+    const [itemAmount, setItemAmount] = useState<string>(defaultItemAmount ? String(defaultItemAmount) : "");
+    const [categoryId, setCategoryId] = useState<string>(itemCategoryId ?? "")
     const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
     
     const updateItemAmount = useCallback((newValue: string) => {
