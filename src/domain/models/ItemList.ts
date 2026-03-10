@@ -1,16 +1,18 @@
+import { BaseModel } from "./BaseModel";
 import type Item from "./Item";
 
-export default class ItemList {
+export default class ItemList extends BaseModel {
   private _items: Item[] = []
   private _name: string
   private _createdAt: Date
 
   constructor(
-    readonly id: string,
+    id: string,
     name: string,
     items: Item[],
     createdAt: Date
   ) {
+    super(id)
     this._name = name
     this._items = items
     this._createdAt = createdAt
@@ -47,7 +49,7 @@ export default class ItemList {
   public getTotalValue(): number {
     let sum = 0
     this._items.forEach(item => {
-      sum += item.price
+      sum += item.price * item.amount
     })
 
     return sum

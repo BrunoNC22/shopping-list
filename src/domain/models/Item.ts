@@ -1,7 +1,7 @@
+import { BaseModel } from "./BaseModel"
 import type { Categoria } from "./Categoria"
 
-export default class Item {
-  private readonly _id: string
+export default class Item extends BaseModel {
   private _name: string = ""
   private _price: number = 0
   private _amount: number = 0
@@ -17,16 +17,12 @@ export default class Item {
     categoria: Categoria,
     checked: boolean = false
   ) {
-    this._id = id
+    super(id)
     this.name = name
     this.price = price
     this.amount = amount
     this._category = categoria
     this.checked = checked
-  }
-
-  get id(): string {
-    return this._id
   }
 
   get name(): string {

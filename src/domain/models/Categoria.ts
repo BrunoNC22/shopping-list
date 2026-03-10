@@ -1,14 +1,11 @@
-export class Categoria {
-  private _id: string
+import { BaseModel } from "./BaseModel"
+
+export class Categoria extends BaseModel {
   private _nome: string
 
   constructor(id: string, nome: string) {
-    this._id = id
+    super(id)
     this._nome = nome
-  }
-
-  get id(): string {
-    return this._id
   }
 
   get nome(): string {
