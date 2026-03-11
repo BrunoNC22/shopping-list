@@ -1,5 +1,5 @@
-import type { GetTotalByCategoryInputPort, GetTotalByCategoryProps, GetTotalByCategoryResponseItem } from "../input/GetTotalByCategoryInputPort";
-import type { getByItemListIdItemPersisterOutputPort } from "../output/persistance/ItemPersisterOutputPort";
+import type { GetTotalByCategoryInputPort, GetTotalByCategoryProps, GetTotalByCategoryResponseItem } from "../../input/GetTotalByCategoryInputPort";
+import type { getByItemListIdItemPersisterOutputPort } from "../../output/persistance/ItemPersisterOutputPort";
 
 export class GetTotalByCategory implements GetTotalByCategoryInputPort {
   constructor(private readonly itemPersister: getByItemListIdItemPersisterOutputPort) {}

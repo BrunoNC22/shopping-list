@@ -1,5 +1,5 @@
-import type { EditItemListInputPort, EditItemListProps } from "../input/EditItemListInputPort";
-import type { GetItemListPersisterOutputPort, SaveItemListPersisterOutputPort } from "../output/persistance/ItemListPersisterOutputPort";
+import type { EditItemListInputPort, EditItemListProps } from "../../input/EditItemListInputPort";
+import type { GetItemListPersisterOutputPort, SaveItemListPersisterOutputPort } from "../../output/persistance/ItemListPersisterOutputPort";
 
 export class EditItemList implements EditItemListInputPort {
   constructor(private readonly itemListPersister: SaveItemListPersisterOutputPort & GetItemListPersisterOutputPort) {}

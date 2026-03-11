@@ -1,6 +1,6 @@
 import type Item from "@/domain/models/Item";
 
-export type AddItemProps = {
+export type CreateItemProps = {
   itemListId: string,
   name: string
   price: number,
@@ -8,6 +8,6 @@ export type AddItemProps = {
   categoryId: string
 }
 
-export interface AddItemInputPort {
-  perform(props: AddItemProps): Promise<Item>
+export interface CreateItemInputPort {
+  perform(props: CreateItemProps): Promise<Item>
 }

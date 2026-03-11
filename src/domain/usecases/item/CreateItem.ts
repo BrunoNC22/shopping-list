@@ -1,20 +1,22 @@
-import type { AddItemInputPort, AddItemProps } from "../input/AddItemInputPort";
-import type { Categoria } from "../models/Categoria";
-import Item from "../models/Item";
-import type { GetByIdCategoriesPersisterOutputPort } from "../output/persistance/CategoryPersisterOutputPort";
-import { CategoryNotFoundError } from "../output/persistance/errors/CategoryNotFoundError";
-import { ItemListNotFoundError } from "../output/persistance/errors/ItemListNotFoundError";
-import type { GetItemListPersisterOutputPort } from "../output/persistance/ItemListPersisterOutputPort";
-import type { SaveItemPersisterOutputPort } from "../output/persistance/ItemPersisterOutputPort";
+import type { IdGeneratorOutputPort } from "@/domain/output/id/IdGeneratorOutputPort";
+import type { CreateItemInputPort, CreateItemProps } from "../../input/CreateItemInputPort";
+import type { Categoria } from "../../models/Categoria";
+import Item from "../../models/Item";
+import type { GetByIdCategoriesPersisterOutputPort } from "../../output/persistance/CategoryPersisterOutputPort";
+import { CategoryNotFoundError } from "../../output/persistance/errors/CategoryNotFoundError";
+import { ItemListNotFoundError } from "../../output/persistance/errors/ItemListNotFoundError";
+import type { GetItemListPersisterOutputPort } from "../../output/persistance/ItemListPersisterOutputPort";
+import type { SaveItemPersisterOutputPort } from "../../output/persistance/ItemPersisterOutputPort";
 
-class LocalAddItem implements AddItemInputPort {
+class CreateItem implements CreateItemInputPort {
   constructor(
     private readonly itemPersister: SaveItemPersisterOutputPort,
     private readonly categoryPersister: GetByIdCategoriesPersisterOutputPort,
-    private readonly itemListPersister: GetItemListPersisterOutputPort
+    private readonly itemListPersister: GetItemListPersisterOutputPort,
+    private readonly idgenerator: IdGeneratorOutputPort
   ) {}
 
-  async perform(props: AddItemProps): Promise<Item> {
+  async perform(props: CreateItemProps): Promise<Item> {
     let foundCategory: Categoria
     try {
       foundCategory = await this.categoryPersister.getById(props.categoryId)
@@ -33,7 +35,7 @@ class LocalAddItem implements AddItemInputPort {
       } else throw new Error(`Erro inesperado ao buscar ItemList com id ${props.itemListId}: ${e}`)
     }
 
-    const newItemId = (Math.random() * 10000).toFixed(0)
+    const newItemId = await this.idgenerator.generate()
     const newItem = new Item(newItemId, props.itemListId, props.name, props.price, props.amount, foundCategory)
 
     await this.itemPersister.save(newItem)
@@ -42,4 +44,4 @@ class LocalAddItem implements AddItemInputPort {
   }
 }
 
-export default LocalAddItem
+export default CreateItem

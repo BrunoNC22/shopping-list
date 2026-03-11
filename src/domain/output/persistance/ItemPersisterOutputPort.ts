@@ -8,8 +8,16 @@ export interface GetAllItemsPersisterOutputPort {
   getAll(): Promise<Item[]>
 }
 
+export interface GetByIdItemPersisterOutputPort {
+  getById(id: string): Promise<Item>
+}
+
 export interface getByItemListIdItemPersisterOutputPort {
   getByItemListId(itemListId: string): Promise<Item[]>
+}
+
+export interface DeleteItemPersisterOutputPort {
+  delete(itemId: string): Promise<void>
 }
 
 export interface ReplaceItemsPersisterOutputPort {
@@ -20,4 +28,6 @@ export interface ItemPersisterOutputPort extends
   SaveItemPersisterOutputPort, 
   GetAllItemsPersisterOutputPort,
   getByItemListIdItemPersisterOutputPort,
-  ReplaceItemsPersisterOutputPort {}
+  ReplaceItemsPersisterOutputPort,
+  DeleteItemPersisterOutputPort,
+  GetByIdItemPersisterOutputPort {}

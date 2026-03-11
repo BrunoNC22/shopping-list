@@ -1,8 +1,8 @@
-import type { EditIntemInputPort, EditItemProps } from "../input/EditItemInputPort";
-import type { Categoria } from "../models/Categoria";
-import type { GetByIdCategoriesPersisterOutputPort } from "../output/persistance/CategoryPersisterOutputPort";
-import { CategoryNotFoundError } from "../output/persistance/errors/CategoryNotFoundError";
-import type { getByItemListIdItemPersisterOutputPort, SaveItemPersisterOutputPort } from "../output/persistance/ItemPersisterOutputPort";
+import type { EditIntemInputPort, EditItemProps } from "../../input/EditItemInputPort";
+import type { Categoria } from "../../models/Categoria";
+import type { GetByIdCategoriesPersisterOutputPort } from "../../output/persistance/CategoryPersisterOutputPort";
+import { CategoryNotFoundError } from "../../output/persistance/errors/CategoryNotFoundError";
+import type { getByItemListIdItemPersisterOutputPort, SaveItemPersisterOutputPort } from "../../output/persistance/ItemPersisterOutputPort";
 
 export class EditItem implements EditIntemInputPort {
   constructor(
