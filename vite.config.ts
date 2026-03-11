@@ -24,6 +24,11 @@ export default defineConfig({
           root: './src',
           setupFiles: './src/main/config/vitest-setup.js',
           globals: true
+        },
+        resolve: {
+          alias: {
+            "@": path.resolve(__dirname, "./src"),
+          }
         }
       }
     ]
