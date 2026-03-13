@@ -6,12 +6,14 @@ import type { CreateCategoryInputPort, CreateCategoryProps } from "@/domain/inpu
 
 type CategoriesProviderProps = {
   getAllCategoriesUsecase: GetAllCategoriesInputPort;
+  localGetAllCategories: GetAllCategoriesInputPort
   createCategoryUsecase: CreateCategoryInputPort
 };
 
 export const CategoriesProvider = ({
   children,
   getAllCategoriesUsecase,
+  localGetAllCategories,
   createCategoryUsecase
 }: PropsWithChildren & CategoriesProviderProps) => {
   const [categories, setCategories] = useState<Categoria[] | null>(null);
@@ -19,9 +21,11 @@ export const CategoriesProvider = ({
 
   const getAllCategories = useCallback(async () => {
     setIsLoading(true)
-    setCategories(await getAllCategoriesUsecase.perform())
+    setCategories(await localGetAllCategories.perform())
+    getAllCategoriesUsecase.perform()
+      .then(result => setCategories(result))
     setIsLoading(false)
-  }, [getAllCategoriesUsecase]);
+  }, [getAllCategoriesUsecase, localGetAllCategories]);
 
   const handleCreateCategory = useCallback(async (props: CreateCategoryProps) => {
     const createdCategoryId = await createCategoryUsecase.perform(props)

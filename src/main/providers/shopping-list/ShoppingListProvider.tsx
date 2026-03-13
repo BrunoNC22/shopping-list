@@ -18,11 +18,14 @@ import type { GetItemListByItemListIdInputPort } from "@/domain/input/GetItemLis
 
 type ShoppingListProviderProps = {
   getItemListByItemListId: GetItemListByItemListIdInputPort;
+  localGetItemListByItemListId: GetItemListByItemListIdInputPort;
   removeItem: RemoveItemInputPort;
   addItem: CreateItemInputPort;
   toggleIsChecked: ToggleItemIsCheckedInputPort;
-  getTotalByCategory: GetTotalByCategoryInputPort
+  getTotalByCategory: GetTotalByCategoryInputPort;
+  localGetTotalByCategory: GetTotalByCategoryInputPort
   getItemsByCategory: GetItemsByCategoryInputPort
+  localGetItemsByCategory: GetItemsByCategoryInputPort
   editItem: EditIntemInputPort
 };
 
@@ -30,10 +33,13 @@ export const ShoppingListProvider = ({
   children,
   addItem,
   getItemListByItemListId,
+  localGetItemListByItemListId,
   removeItem,
   toggleIsChecked,
   getTotalByCategory,
+  localGetTotalByCategory,
   getItemsByCategory,
+  localGetItemsByCategory,
   editItem
 }: PropsWithChildren & ShoppingListProviderProps) => {
   const { listId } = useParams()
@@ -55,17 +61,21 @@ export const ShoppingListProvider = ({
   const handleGetItemsByCategory = useCallback(
     async () => {
       if (!listId) return
-      setItemsByCategory(await getItemsByCategory.perform({ itemListId: listId }))
+      setItemsByCategory(await localGetItemsByCategory.perform({ itemListId: listId }))
+      getItemsByCategory.perform({ itemListId: listId })
+        .then(result => setItemsByCategory(result))
     },
-    [getItemsByCategory, listId]
+    [getItemsByCategory, localGetItemsByCategory, listId]
   )
 
   const handleGetTotalByCategory = useCallback(
     async () => {
       if (!listId) return
-      setTotalByCategory(await getTotalByCategory.perform({ itemListId: listId }))
+      setTotalByCategory(await localGetTotalByCategory.perform({ itemListId: listId }))
+      getTotalByCategory.perform({ itemListId: listId })
+        .then(result => setTotalByCategory(result))
     },
-    [getTotalByCategory, listId]
+    [getTotalByCategory, localGetTotalByCategory, listId]
   )
 
   const handleGetItemListByItemListId = useCallback(async () => {
@@ -73,12 +83,19 @@ export const ShoppingListProvider = ({
 
     if (itemList) setIsReloading(true)
     if (!itemList) setIsLoading(true)
-    const items = await getItemListByItemListId.perform({ itemListId: listId });
-    setShoppingListName(items.name)
-    setItemList(items.getItems());
+
+    const localItems = await localGetItemListByItemListId.perform({ itemListId: listId })
+    setShoppingListName(localItems.name)
+    setItemList(localItems.getItems());
+
+    getItemListByItemListId.perform({ itemListId: listId })
+      .then(result => {
+        setShoppingListName(result.name)
+        setItemList(result.getItems());
+      })
     setIsReloading(false)
     setIsLoading(false)
-  }, [getItemListByItemListId, itemList, listId]);
+  }, [getItemListByItemListId, localGetItemListByItemListId, itemList, listId]);
 
   const handleRemoveItem = useCallback(
     async (itemId: string) => {

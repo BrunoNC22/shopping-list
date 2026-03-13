@@ -8,17 +8,27 @@ import type { EditItemListInputPort, EditItemListProps } from "@/domain/input/Ed
 
 type ItemListsProviderProps = {
   getItemLists: GetItemListsInputPort
+  localGetItemLists: GetItemListsInputPort,
   createItemList: CreateItemListInputPort
   deleteItemList: DeleteItemListInputPort
   editItemList: EditItemListInputPort
 }
 
-export const ItemListsProvider = ({ children, createItemList, getItemLists, deleteItemList, editItemList }: PropsWithChildren & ItemListsProviderProps) => {
+export const ItemListsProvider = ({
+  children,
+  createItemList,
+  getItemLists,
+  deleteItemList,
+  editItemList,
+  localGetItemLists
+}: PropsWithChildren & ItemListsProviderProps) => {
   const [itemLists, setItemLists] = useState<ItemList[]>([])
 
   const handleGetItemLists = useCallback(async () => {
-    setItemLists(await getItemLists.perform())
-  }, [getItemLists])
+    setItemLists(await localGetItemLists.perform())
+    getItemLists.perform()
+      .then(result => setItemLists(result))
+  }, [getItemLists, localGetItemLists])
 
   const handleCreateItemList = useCallback(async (props: CreateItemListProps) => {
     await createItemList.perform(props)
