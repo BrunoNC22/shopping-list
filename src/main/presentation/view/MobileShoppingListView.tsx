@@ -2,7 +2,7 @@ import { useShoppingList } from "@/main/providers/shopping-list/ShoppingListCont
 import { MobileItemForm } from "../item-form/mobile-item-form";
 import { Button } from "@/components/ui/button";
 import { useDrawer } from "@/main/providers/drawer/DrawerContext";
-import { EllipsisVertical, Pen, Trash2, UserCircle2 } from "lucide-react"
+import { EllipsisVertical, Pen, Trash2 } from "lucide-react"
 import { CheckboxIcon } from "../checkbox/checkbox-icon";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 
@@ -21,16 +21,9 @@ export const MobileShoppingListView = () => {
   const { openDrawer } = useDrawer()
 
   return (
-    <div className="relative flex h-screen w-full flex-col text-white">
-      <header className="sticky top-0 z-10 flex items-center justify-between bg-background/50 p-4 backdrop-blur-xs">
-        <h1 className="text-xl font-bold leading-tight tracking-[-0.015em]">
-          {shoppingListName}
-        </h1>
-        <button className="flex h-10 w-10 cursor-pointer items-center justify-center rounded-full">
-          <UserCircle2 />
-        </button>
-      </header>
-      <main className="flex h-[100vh] flex-col px-4 pt-2">
+    <div className="relative flex items-center h-screen w-full flex-col text-white">
+      {/* <Header headerTitle={shoppingListName} /> */}
+      <main className="flex h-[100vh] flex-col px-4 pt-20 container max-w-md">
         <div className="flex flex-col gap-3 pb-32">
           {itemsByCategory.map(responseItem => (
             <div className="flex flex-col gap-3 pb-8" key={responseItem.category.id}>
@@ -118,7 +111,7 @@ export const MobileShoppingListView = () => {
         </div>
       </main>
 
-      <footer className="fixed bottom-0 left-0 right-0 z-10 p-4 flex gap-3 items-center">
+      <footer className="fixed bottom-0 left-0 right-0 z-10 p-4 flex gap-3 items-center justify-center">
         <div className="neon-shadow-subtle flex-1 flex max-w-md items-center justify-between rounded-xl border border-primary/20 bg-surface-dark/80 p-4 backdrop-blur-xs">
           <span className="text-base font-semibold uppercase tracking-wider text-gray-300">
             Total

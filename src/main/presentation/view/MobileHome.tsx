@@ -20,17 +20,8 @@ export const MobileHome = () => {
 
   return (
     <div className="relative flex h-auto min-h-screen w-full flex-col text-white">
-      <header className="sticky top-0 z-10 flex items-center justify-between bg-background/50 p-4 pb-2 backdrop-blur-sm">
-        <h1 className="text-xl font-bold leading-tight tracking-[-0.015em]">
-          Listas de Compras
-        </h1>
-        <button className="flex h-10 w-10 cursor-pointer items-center justify-center rounded-full">
-          <span className="material-symbols-outlined text-3xl">
-            account_circle
-          </span>
-        </button>
-      </header>
-      <div className="flex-1 flex flex-col pb-32 pt-6 space-y-6 overflow-y-auto items-center">
+      {/* <Header headerTitle="Listas de Compras" /> */}
+      <div className="flex-1 flex flex-col pb-32 pt-20 space-y-6 overflow-y-auto items-center">
         <div className="flex flex-col px-4 gap-5 container max-w-md">
           {itemLists.map((itemList) => (
             <Link
