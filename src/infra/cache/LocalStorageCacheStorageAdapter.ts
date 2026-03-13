@@ -2,17 +2,19 @@ import type { CacheStorageOutputPort } from "@/domain/output/cache/CacheStorageO
 import { ResourceNotFoundError } from "@/domain/output/cache/errors/ResourceNotFoundError";
 
 export class LocalStorageCacheStorageAdapter implements CacheStorageOutputPort {
+  constructor(private readonly localStorage: Storage) {}
+
   async get<T>(key: string): Promise<T> {
-    const foundResource = localStorage.getItem(key)
+    const foundResource = this.localStorage.getItem(key)
     if (!foundResource) throw new ResourceNotFoundError(key)
     return JSON.parse(foundResource) as T
   }
 
   async set(key: string, value: object): Promise<void> {
     if (value) {
-      localStorage.setItem(key, JSON.stringify(value))
+      this.localStorage.setItem(key, JSON.stringify(value))
     } else {
-      localStorage.removeItem(key)
+      this.localStorage.removeItem(key)
     }
   }
 }
