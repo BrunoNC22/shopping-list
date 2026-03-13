@@ -44,7 +44,6 @@ export class LocalCategoryPersister implements CategoryPersisterOutputPort {
       categories = await this.cacheStorage.get<StorageCategory[]>('categories')
     } catch (e) {
       if (e instanceof ResourceNotFoundError) {
-        console.log("auidygsasdSAAAAAAAAAAAAAAAAAAAA")
         await this.cacheStorage.set('categories', defaultItems)
         categories = defaultItems
       } else {

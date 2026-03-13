@@ -3,9 +3,10 @@ import Item from "@/domain/models/Item";
 import type { GetCacheStorageOutputPort, SetCacheStorageOutputPort } from "@/domain/output/cache/CacheStorageOutputPort";
 import { ResourceNotFoundError } from "@/domain/output/cache/errors/ResourceNotFoundError";
 import type { GetAllCategoriesPersisterOutputPort, GetByIdCategoriesPersisterOutputPort } from "@/domain/output/persistance/CategoryPersisterOutputPort";
+import { ItemNotFoundError } from "@/domain/output/persistance/errors/ItemNotFoundError";
 import type { ItemPersisterOutputPort } from "@/domain/output/persistance/ItemPersisterOutputPort";
 
-type StorageItem = {
+export type StorageItem = {
   id: string,
   itemListId: string,
   name: string,
@@ -54,6 +55,24 @@ export class LocalItemPersisterAdapter implements ItemPersisterOutputPort {
     const categories = await this.categoryPersister.getAll()
 
     return receivedItems.filter((storageItem) => storageItem.itemListId === itemListId).map((item) => this.parseStorageItem(item, categories))
+  }
+
+  async delete(itemId: string): Promise<void> {
+    const items = await this.getAllItemsOrThrow()
+    const filteredItems = items.filter(item => item.id != itemId)
+    
+    await this.cacheStorage.set('items', filteredItems)
+  }
+
+  async getById(id: string): Promise<Item> {
+    const items = await this.getAllItemsOrThrow()
+    const foundItem = items.find(item => item.id === id)
+    
+    if (!foundItem) throw new ItemNotFoundError(`Item com id ${id} não encontrado`)
+    
+    const categories = await this.categoryPersister.getAll()
+
+    return this.parseStorageItem(foundItem, categories)
   }
 
   private parseStorageItem(storageItem: StorageItem, categories: Categoria[]): Item {
