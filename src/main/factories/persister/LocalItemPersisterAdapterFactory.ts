@@ -1,4 +1,4 @@
-import { LocalItemPersisterAdapter } from "@/infra/persistance/LocalItemPersisterAdapter";
+import { LocalItemPersisterAdapter } from "@/infra/persistance/local/LocalItemPersisterAdapter";
 import { createLocalStorageCacheStorageAdapter } from "../cache/LocalStorageCacheStorageAdapterFactory";
 import { createLocalCategoryPersister } from "./LocalCategoryPersisterFactory";
 

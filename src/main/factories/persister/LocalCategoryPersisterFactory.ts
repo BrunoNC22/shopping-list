@@ -1,4 +1,4 @@
-import { LocalCategoryPersister } from "@/infra/persistance/LocalCategoryPersister"
+import { LocalCategoryPersister } from "@/infra/persistance/local/LocalCategoryPersister"
 import { createLocalStorageCacheStorageAdapter } from "../cache/LocalStorageCacheStorageAdapterFactory"
 
 export const createLocalCategoryPersister = () => {
