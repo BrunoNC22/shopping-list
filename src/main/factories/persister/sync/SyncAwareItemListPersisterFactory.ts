@@ -1,5 +1,5 @@
 import { createRemoteItemListPersister } from "../remote/RemoteItemListPersisterFactory";
-import { createLocalItemListPersister } from "../LocalItemListPersisterFactory";
+import { createLocalItemListPersister } from "../local/LocalItemListPersisterFactory";
 import { createIndexedDBSyncQueueAdapter } from "../../sync/IndexedDBSyncQueueAdapter";
 import { createSyncEngine } from "../../sync/SyncEngineFactory";
 import { createIdGeneratorAdapter } from "../../id/IdGeneratorAdapterFactory";

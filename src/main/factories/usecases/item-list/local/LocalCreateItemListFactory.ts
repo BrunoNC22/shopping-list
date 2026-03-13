@@ -1,6 +1,6 @@
-import { createSyncAwareItemListPersister } from "../../persister/sync/SyncAwareItemListPersisterFactory"
-import { createIdGeneratorAdapter } from "../../id/IdGeneratorAdapterFactory"
 import { CreateItemList } from "@/domain/usecases/item-list/CreateItemList"
+import { createIdGeneratorAdapter } from "@/main/factories/id/IdGeneratorAdapterFactory"
+import { createSyncAwareItemListPersister } from "@/main/factories/persister/sync/SyncAwareItemListPersisterFactory"
 
 export const createLocalCreateItemListFactory = () => {
   return new CreateItemList(createSyncAwareItemListPersister(), createIdGeneratorAdapter())

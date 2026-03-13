@@ -1,9 +1,9 @@
 import { ItemListsProvider } from "@/main/providers/item-list/ItemListsProvider"
-import { createLocalCreateItemListFactory } from "../usecases/item-list/LocalCreateItemListFactory"
-import { createLocalGetAllItemLists } from "../usecases/item-list/LocalGetAllItemListsFactory"
+import { createLocalCreateItemListFactory } from "../usecases/item-list/local/LocalCreateItemListFactory"
+import { createLocalGetAllItemLists } from "../usecases/item-list/local/LocalGetAllItemListsFactory"
 import { MobileHome } from "@/main/presentation/view/MobileHome"
-import { createLocalDeleteItemListFactory } from "../usecases/item-list/LocalDeleteItemListFactory"
-import { createLocalEditItemListFactory } from "../usecases/item-list/LocalEditItemListFactory"
+import { createLocalDeleteItemListFactory } from "../usecases/item-list/local/LocalDeleteItemListFactory"
+import { createLocalEditItemListFactory } from "../usecases/item-list/local/LocalEditItemListFactory"
 import { DrawerProvider } from "@/main/providers/drawer/DrawerProvider"
 
 export const ShoppingListsFactory = () => {
