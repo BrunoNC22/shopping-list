@@ -7,20 +7,20 @@ import {
 } from "react";
 import type Item from "@/domain/models/Item";
 import { ShoppingListContext } from "./ShoppingListContext";
-import type RemoveItemInputPort from "@/domain/input/RemoveItemInputPort";
-import type { AddItemInputPort, AddItemProps } from "@/domain/input/AddItemInputPort";
-import type { ToggleIsCheckedInputPort } from "@/domain/input/ToggleIsCheckedInputPort";
+import type RemoveItemInputPort from "@/domain/input/DeleteItemInputPort";
+import type { CreateItemInputPort, CreateItemProps } from "@/domain/input/CreateItemInputPort";
+import type { ToggleItemIsCheckedInputPort } from "@/domain/input/ToggleItemIsCheckedInputPort";
 import type { GetTotalByCategoryInputPort, GetTotalByCategoryResponseItem } from "@/domain/input/GetTotalByCategoryInputPort";
 import type { GetItemsByCategoryInputPort, ItemsByCategoryResponseItem } from "@/domain/input/GetItemsByCategoryInputPort";
 import { useParams } from "react-router";
-import type { GetItemListByItemListId } from "@/domain/usecases/GetItemListByItemListId";
 import type { EditIntemInputPort, EditItemProps } from "@/domain/input/EditItemInputPort";
+import type { GetItemListByItemListIdInputPort } from "@/domain/input/GetItemListByItemListIdInputPort";
 
 type ShoppingListProviderProps = {
-  getItemListByItemListId: GetItemListByItemListId;
+  getItemListByItemListId: GetItemListByItemListIdInputPort;
   removeItem: RemoveItemInputPort;
-  addItem: AddItemInputPort;
-  toggleIsChecked: ToggleIsCheckedInputPort;
+  addItem: CreateItemInputPort;
+  toggleIsChecked: ToggleItemIsCheckedInputPort;
   getTotalByCategory: GetTotalByCategoryInputPort
   getItemsByCategory: GetItemsByCategoryInputPort
   editItem: EditIntemInputPort
@@ -91,7 +91,7 @@ export const ShoppingListProvider = ({
   );
 
   const handleAddItem = useCallback(
-    async (props: Omit<AddItemProps, 'itemListId'>) => {
+    async (props: Omit<CreateItemProps, 'itemListId'>) => {
       if (!listId) return
       await addItem.perform({
         amount: props.amount,

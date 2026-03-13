@@ -1,4 +1,4 @@
-import type { AddItemProps } from "@/domain/input/AddItemInputPort";
+import type { CreateItemProps } from "@/domain/input/CreateItemInputPort";
 import type { EditItemProps } from "@/domain/input/EditItemInputPort";
 import type { ItemsByCategoryResponseItem } from "@/domain/input/GetItemsByCategoryInputPort";
 import type { GetTotalByCategoryResponseItem } from "@/domain/input/GetTotalByCategoryInputPort";
@@ -6,7 +6,7 @@ import type Item from "@/domain/models/Item";
 import { createContext, useContext } from "react";
 
 export interface IShoppingListContext {
-  addItem(props: Omit<AddItemProps, 'itemListId'>): Promise<void>
+  addItem(props: Omit<CreateItemProps, 'itemListId'>): Promise<void>
   editItem(props: EditItemProps): Promise<void>
   removeItem(itemId: string): Promise<void>
   getItemListByItemListId(): Promise<void>
