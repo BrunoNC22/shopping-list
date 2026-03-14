@@ -26,9 +26,13 @@ export const ItemListsProvider = ({
 
   const handleGetItemLists = useCallback(async () => {
     setItemLists(await localGetItemLists.perform())
-    getItemLists.perform()
-      .then(result => setItemLists(result))
-  }, [getItemLists, localGetItemLists])
+
+    getItemLists
+      .perform()
+      .then(result => {
+        setItemLists(result)
+      })
+  }, [localGetItemLists, getItemLists])
 
   const handleCreateItemList = useCallback(async (props: CreateItemListProps) => {
     await createItemList.perform(props)
@@ -47,6 +51,18 @@ export const ItemListsProvider = ({
   
   useEffect(() => {
     handleGetItemLists()
+  }, [])
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      getItemLists
+        .perform()
+        .then(result => {
+          setItemLists(result)
+        })
+    }, 5000)
+
+    return () => clearInterval(interval)
   }, [])
   return (
     <ItemListsContext.Provider value={{

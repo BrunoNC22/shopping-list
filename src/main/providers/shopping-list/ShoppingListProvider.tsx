@@ -62,20 +62,22 @@ export const ShoppingListProvider = ({
     async () => {
       if (!listId) return
       setItemsByCategory(await localGetItemsByCategory.perform({ itemListId: listId }))
+
       getItemsByCategory.perform({ itemListId: listId })
         .then(result => setItemsByCategory(result))
     },
-    [getItemsByCategory, localGetItemsByCategory, listId]
+    [localGetItemsByCategory, getItemsByCategory, listId]
   )
 
   const handleGetTotalByCategory = useCallback(
     async () => {
       if (!listId) return
       setTotalByCategory(await localGetTotalByCategory.perform({ itemListId: listId }))
+
       getTotalByCategory.perform({ itemListId: listId })
         .then(result => setTotalByCategory(result))
     },
-    [getTotalByCategory, localGetTotalByCategory, listId]
+    [localGetTotalByCategory, getTotalByCategory, listId]
   )
 
   const handleGetItemListByItemListId = useCallback(async () => {
@@ -93,9 +95,10 @@ export const ShoppingListProvider = ({
         setShoppingListName(result.name)
         setItemList(result.getItems());
       })
+    
     setIsReloading(false)
     setIsLoading(false)
-  }, [getItemListByItemListId, localGetItemListByItemListId, itemList, listId]);
+  }, [localGetItemListByItemListId, getItemListByItemListId, itemList, listId]);
 
   const handleRemoveItem = useCallback(
     async (itemId: string) => {
@@ -147,6 +150,25 @@ export const ShoppingListProvider = ({
     handleGetTotalByCategory()
     handleGetItemsByCategory()
   }, []);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (!listId) return
+      getItemListByItemListId.perform({ itemListId: listId })
+        .then(result => {
+          setShoppingListName(result.name)
+          setItemList(result.getItems());
+        })
+      
+      getItemsByCategory.perform({ itemListId: listId })
+        .then(result => setItemsByCategory(result))
+
+      getTotalByCategory.perform({ itemListId: listId })
+        .then(result => setTotalByCategory(result))
+    }, 5000)
+
+    return () => clearInterval(interval)
+  }, [])
   return (
     <ShoppingListContext.Provider value={{
       addItem: handleAddItem,

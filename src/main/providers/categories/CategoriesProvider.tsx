@@ -22,10 +22,13 @@ export const CategoriesProvider = ({
   const getAllCategories = useCallback(async () => {
     setIsLoading(true)
     setCategories(await localGetAllCategories.perform())
-    getAllCategoriesUsecase.perform()
-      .then(result => setCategories(result))
     setIsLoading(false)
-  }, [getAllCategoriesUsecase, localGetAllCategories]);
+
+    getAllCategoriesUsecase.perform()
+      .then(result => {
+        setCategories(result)
+      })
+  }, [localGetAllCategories, getAllCategoriesUsecase]);
 
   const handleCreateCategory = useCallback(async (props: CreateCategoryProps) => {
     const createdCategoryId = await createCategoryUsecase.perform(props)
@@ -36,6 +39,17 @@ export const CategoriesProvider = ({
   useEffect(() => {
     getAllCategories()
   }, [getAllCategories])
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      getAllCategoriesUsecase.perform()
+        .then(result => {
+          setCategories(result)
+        })
+    }, 5000);
+
+    return () => clearInterval(interval)
+  }, [])
 
   return (
     <CategoriesContext.Provider
