@@ -12,7 +12,7 @@ type RemoteSyncEvent = {
 
 export class SyncEngine implements SyncEngineOutputPort {
 
-  private isRunning = false
+  static isRunning = false
 
   constructor(
     private readonly queue: GetPendingSyncQueueOutputPort & MarkAsSyncedSyncQueueOutputPort,
@@ -20,21 +20,25 @@ export class SyncEngine implements SyncEngineOutputPort {
   ) {}
 
   async trigger() {
-    if (this.isRunning) return
+    if (SyncEngine.isRunning) return
     if (!navigator.onLine) return
 
-    this.isRunning = true
+    SyncEngine.isRunning = true
 
     const pending = await this.queue.getPending()
 
     const requestBody = pending.map((syncEvent) => this.toRemoteSyncEnvent(syncEvent))
-    await this.httpClient.post({ url: "/sync/events", body: requestBody })
-    
-    await Promise.all(
-      pending.map((event) => this.queue.markAsSynced(event.id))
-    )
+    try {
+      await this.httpClient.post({ url: "/sync/events", body: requestBody })
+      
+      await Promise.all(
+        pending.map((event) => this.queue.markAsSynced(event.id))
+      )
+    } catch (e) {
+      console.log("Error while trying to sync events: ", e)
+    }
 
-    this.isRunning = false
+    SyncEngine.isRunning = false
   }
 
   toRemoteSyncEnvent(syncEvent: AnySyncEvent): RemoteSyncEvent {
