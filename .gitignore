@@ -24,4 +24,4 @@ dist-ssr
 *.sw?
 
 .env
-/prisma/backend/infra/db/prisma/generated
+apps/api/src/infra/db/prisma/generated
