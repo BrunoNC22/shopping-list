@@ -29,6 +29,12 @@ const envSchema = z.object({
   FRONTEND_URL: z
     .string()
     .url("FRONTEND_URL deve ser uma URL válida"),
+
+  PORT: z
+    .coerce
+    .number()
+    .int("PORT deve ser um número inteiro")
+    .positive("PORT deve ser positivo")
 });
 
 const parsed = envSchema.safeParse(process.env);
