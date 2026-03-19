@@ -72,7 +72,7 @@ export const Header = ({ headerTitle }: HeaderProps) => {
           </DropdownMenu>
         ) : (
           <Link 
-            to={`https://accounts.google.com/o/oauth2/v2/auth?client_id=${import.meta.env.VITE_GOOGLE_PUBLIC_API_KEY}&redirect_uri=http://localhost:8000/auth/google/redirect&response_type=code&scope=https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile`} 
+            to={`https://accounts.google.com/o/oauth2/v2/auth?client_id=${import.meta.env.VITE_GOOGLE_PUBLIC_API_KEY}&redirect_uri=${import.meta.env.VITE_BACKEND_URL}/auth/google/redirect&response_type=code&scope=https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile`} 
             className="flex cursor-pointer items-center justify-center"
           >
             <Button variant={'outline'}>
