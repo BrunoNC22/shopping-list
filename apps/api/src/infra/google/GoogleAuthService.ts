@@ -33,16 +33,17 @@ export class GoogleAuthService implements GoogleAuthServiceOutputPort {
   ) {}
 
   async getUserData({ code }: GoogleAuthServiceProps): Promise<GoogleAuthServiceResponse> {
+    const body: BodyInit = new URLSearchParams()
+    body.append("code", code)
+    body.append("client_id", this.config.clientId)
+    body.append("client_secret", this.config.clientSecret)
+    body.append("redirect_uri", this.config.redirectUri)
+    body.append("grant_type", "authorization_code")
+
     const resp = await this.httpClient.post<GetTokenResponseType>({ 
       url: this.config.getTokenUrl,
       headers: { "Content-Type": "application/x-www-form-urlencoded" },
-      body: new URLSearchParams({
-        code,
-        client_id: this.config.clientId,
-        client_secret: this.config.clientSecret,
-        redirect_uri: this.config.redirectUri,
-        grant_type: "authorization_code",
-      }),
+      body: body,
     })
 
     const finalResponse = await this.httpClient.get<GetUserDataResponseType>({
@@ -50,6 +51,7 @@ export class GoogleAuthService implements GoogleAuthServiceOutputPort {
       headers: { Authorization: `${resp.token_type} ${resp.access_token}` }
     })
 
+    console.log("user info from google: ", finalResponse)
     return {
       email: finalResponse.email,
       id: finalResponse.id,

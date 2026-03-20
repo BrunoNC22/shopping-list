@@ -2,9 +2,10 @@ import { HttpClientOutputPort, PostRequestProps, RequestProps } from "@shopping-
 
 export class FetchHttpClientAdapter implements HttpClientOutputPort {
   async post<T>(props: PostRequestProps): Promise<T> {
+    const body = props.body ? props.body : undefined
     const resp = await fetch(props.url, {
       method: "POST",
-      body: props.body ? JSON.stringify(props.body) : undefined,
+      body: body as BodyInit,
       headers: props.headers
     })
 

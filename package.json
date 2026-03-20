@@ -8,6 +8,7 @@
   ],
   "scripts": {
     "start:api": "npm run start -w api",
+    "start:web": "npm run start -w web",
 
     "dev:web": "npm run dev -w web",
     "dev:api": "npm run dev -w api",

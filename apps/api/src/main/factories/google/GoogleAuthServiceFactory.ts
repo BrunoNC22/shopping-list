@@ -8,7 +8,7 @@ export const createGoogleAuthService = () => new GoogleAuthService(
     clientId: env.GOOGLE_PUBLIC_API_KEY,
     clientSecret: env.GOOGLE_PRIVATE_API_KEY,
     getTokenUrl: "https://oauth2.googleapis.com/token",
-    redirectUri: `${env.FRONTEND_URL}/auth/google/redirect`,
+    redirectUri: `${env.APPLICATION_URL}/auth/google/redirect`,
     getUserInfoUrl: "https://www.googleapis.com/oauth2/v2/userinfo"
   }
 )

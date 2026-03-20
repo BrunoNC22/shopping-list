@@ -34,7 +34,11 @@ const envSchema = z.object({
     .coerce
     .number()
     .int("PORT deve ser um número inteiro")
-    .positive("PORT deve ser positivo")
+    .positive("PORT deve ser positivo"),
+  
+  APPLICATION_URL: z
+    .string()
+    .url("APPLICATION_URL deve ser uma URL válida"),
 });
 
 const parsed = envSchema.safeParse(process.env);
