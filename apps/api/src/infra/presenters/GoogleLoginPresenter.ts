@@ -11,8 +11,13 @@ export class GoogleLoginPresenter implements HandleGoogleAuthCallbackPresenterOu
   }
 
   success(successProps: HandleGoogleAuthCallbackSuccessType): void {
+    const isProduction = env.NODE_ENV === "production"
     this.response
-    .cookie("auth_token", successProps.jwtToken, { httpOnly: true })
+    .cookie("auth_token", successProps.jwtToken, { 
+      httpOnly: true,
+      secure: isProduction,
+      sameSite: isProduction ? "none" : "lax"
+    })
     .redirect(`${env.FRONTEND_URL}/login`)
   }
 }

@@ -39,6 +39,9 @@ const envSchema = z.object({
   APPLICATION_URL: z
     .string()
     .url("APPLICATION_URL deve ser uma URL válida"),
+  
+  NODE_ENV: z
+    .enum(["development", "production", "test"]),
 });
 
 const parsed = envSchema.safeParse(process.env);
@@ -47,7 +50,7 @@ if (!parsed.success) {
   console.error("❌ Variáveis de ambiente inválidas:");
 
   parsed.error.issues.forEach((issue) => {
-    console.error(`- ${issue.path.join(".")}: ${issue.message}`);
+    console.error(`- ${issue.path.join(".")}: ${issue.message} valor recebido: ${issue.input}`);
   });
 
   process.exit(1);
