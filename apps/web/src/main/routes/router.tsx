@@ -13,8 +13,8 @@ const Router = () => {
           <Route path="listas" element={<ShoppingListsFactory />} />
           <Route path="listas/:listId" element={<CreateShoppingListView />} />
           <Route path="/" element={<CreateHomePageFactory />} />
+          <Route path="login" element={<CreateLoginPage />} />
         </Route>
-        <Route path="login" element={<CreateLoginPage />} />
       </Routes>
     </BrowserRouter>
   )
