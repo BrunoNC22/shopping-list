@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { useCurrentAccount } from "@/main/providers/current-account/CurrentAccountContext"
 import { ArrowLeftRight, LogOut } from "lucide-react"
+import { useMemo } from "react"
 import { Link } from "react-router"
 
 export type HeaderProps = {
@@ -10,6 +11,9 @@ export type HeaderProps = {
 
 export const Header = ({ headerTitle }: HeaderProps) => {
   const { currentAccount } = useCurrentAccount()
+  const googleLoginRedirectURI = useMemo(() => {
+    return `https://accounts.google.com/o/oauth2/v2/auth?client_id=${import.meta.env.VITE_GOOGLE_PUBLIC_API_KEY}&redirect_uri=${import.meta.env.VITE_BACKEND_URL}/auth/google/redirect&response_type=code&scope=https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile`
+  }, [])
 
   return (
     <header className="fixed w-full top-0 z-10 bg-background/50 backdrop-blur-sm border-b border-slate-200 dark:border-slate-800">
@@ -37,10 +41,7 @@ export const Header = ({ headerTitle }: HeaderProps) => {
                 )}
               </div>
             </DropdownMenuTrigger>
-            <DropdownMenuContent onClick={(e) => {
-              e.preventDefault()
-              e.stopPropagation()
-            }}>
+            <DropdownMenuContent>
               <DropdownMenuLabel>
                 <div className="flex gap-2 items-center">
                   <div className="h-7 w-7 flex items-center justify-center rounded-full overflow-hidden">
@@ -59,9 +60,13 @@ export const Header = ({ headerTitle }: HeaderProps) => {
                 </div>
               </DropdownMenuLabel>
               <DropdownMenuSeparator />
-              <DropdownMenuItem>
-                <ArrowLeftRight />
-                Trocar de conta Google
+              <DropdownMenuItem asChild>
+                <Link
+                  to={googleLoginRedirectURI}
+                >
+                  <ArrowLeftRight />
+                  Trocar de conta Google
+                </Link>
               </DropdownMenuItem>
               <DropdownMenuItem variant="destructive">
                 <LogOut />
@@ -72,7 +77,7 @@ export const Header = ({ headerTitle }: HeaderProps) => {
           </DropdownMenu>
         ) : (
           <Link 
-            to={`https://accounts.google.com/o/oauth2/v2/auth?client_id=${import.meta.env.VITE_GOOGLE_PUBLIC_API_KEY}&redirect_uri=${import.meta.env.VITE_BACKEND_URL}/auth/google/redirect&response_type=code&scope=https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile`} 
+            to={googleLoginRedirectURI} 
             className="flex cursor-pointer items-center justify-center"
           >
             <Button variant={'outline'}>
