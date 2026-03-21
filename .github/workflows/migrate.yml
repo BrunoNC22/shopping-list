@@ -24,7 +24,7 @@ jobs:
           echo "DATABASE_URL=${{ secrets.DATABASE_URL }}" > apps/api/.env
 
       - name: Build do projeto
-        run: npm run build:api
+        run: npm run build:domain && npm run build:api
 
       - name: Rodar migrations
         run: npm run migrate -w api
