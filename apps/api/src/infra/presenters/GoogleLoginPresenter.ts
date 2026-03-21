@@ -1,5 +1,6 @@
 import { HandleGoogleAuthCallbackPresenterOutputPort, HandleGoogleAuthCallbackSuccessType } from "@shopping-list/domain";
 import { Response } from "express";
+import { env } from "../../main/config/env";
 
 export class GoogleLoginPresenter implements HandleGoogleAuthCallbackPresenterOutputPort {
   constructor(private readonly response: Response) {}
@@ -12,6 +13,6 @@ export class GoogleLoginPresenter implements HandleGoogleAuthCallbackPresenterOu
   success(successProps: HandleGoogleAuthCallbackSuccessType): void {
     this.response
     .cookie("auth_token", successProps.jwtToken, { httpOnly: true })
-    .redirect(`http://localhost:5173/login`)
+    .redirect(`${env.FRONTEND_URL}/login`)
   }
 }
