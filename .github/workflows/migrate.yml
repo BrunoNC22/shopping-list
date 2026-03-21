@@ -1,0 +1,30 @@
+name: Database migration
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build-and-migrate:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout do código
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Instalar dependências
+        run: npm install -w api
+
+      - name: Criar arquivo .env
+        run: |
+          echo "DATABASE_URL=${{ secrets.DATABASE_URL }}" > apps/api/.env
+
+      - name: Build do projeto
+        run: npm run build:api
+
+      - name: Rodar migrations
+        run: npm run migrate -w api
