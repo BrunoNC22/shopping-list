@@ -4,7 +4,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite --host",
-    "build": "tsc -b && vite build",
+    "build": "npm run build -w @shopping-list/domain && tsc -b && vite build",
     "start": "vite preview --port 5173"
   },
   "dependencies": {
