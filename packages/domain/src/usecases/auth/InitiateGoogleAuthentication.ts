@@ -1,10 +1,10 @@
 import { InitiateGoogleAuthenticationInputPort } from "@/input";
-import { CurrentAccount } from "@/models";
+import { User } from "@/models";
 import { GetHttpClientOutputPort, InitiateGoogleAuthenticationPresenterOutputPort, SetCurrentAccountPersisterOutputPort, UnauthorizedError } from "@/output";
 
 
-
 type GoogleLoginProps = {
+  id: string,
   name: string,
   email: string,
   profilePicUrl?: string
@@ -27,7 +27,7 @@ export class InitiateGoogleAuthentication implements InitiateGoogleAuthenticatio
       } else return this.presenter.handleDefaultError(e as Error)
     }
 
-    const currentAccount = new CurrentAccount(props.name, props.email, props.profilePicUrl)
+    const currentAccount = new User(props.id, props.name, props.email, props.profilePicUrl)
     await this.currentAccountPersister.set(currentAccount)
 
     return this.presenter.handleDefaultSuccess(currentAccount)

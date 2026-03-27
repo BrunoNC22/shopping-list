@@ -1,5 +1,5 @@
-import type { Categoria } from "../models/Categoria"
-import { type Item } from "../models/Item"
+import type { Categoria } from "../../models/Categoria"
+import { type Item } from "../../models/Item"
 
 export type ItemsByCategoryResponseItem = {
   items: Item[]

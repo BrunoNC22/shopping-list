@@ -1,12 +1,12 @@
-import type { GetCurrentAccountInputPort } from "@/input/GetCurrentAccountInputPort";
-import type { CurrentAccount } from "@/models/CurrentAccount";
-import type { GetCurrentAccountPersisterOutputPort } from "@/output/persistance/CurrentAccountPersisterOutputPort";
+import { GetCurrentAccountInputPort } from "@/input";
+import { User } from "@/models";
+import { GetCurrentAccountPersisterOutputPort } from "@/output";
 
 
 export class GetCurrentAccount implements GetCurrentAccountInputPort {
   constructor(private readonly currentAccountPersister: GetCurrentAccountPersisterOutputPort) {}
 
-  async perform(): Promise<CurrentAccount | undefined> {
+  async perform(): Promise<User | undefined> {
     return await this.currentAccountPersister.get()
   }
 }

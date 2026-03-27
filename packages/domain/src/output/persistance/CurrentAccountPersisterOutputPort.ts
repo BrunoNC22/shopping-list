@@ -1,11 +1,11 @@
-import type { CurrentAccount } from "@/models/CurrentAccount";
+import { User } from "@/models";
 
 export interface GetCurrentAccountPersisterOutputPort {
-  get(): Promise<CurrentAccount | undefined>
+  get(): Promise<User | undefined>
 }
 
 export interface SetCurrentAccountPersisterOutputPort {
-  set(currentAccount: CurrentAccount): Promise<void>
+  set(currentAccount: User): Promise<void>
 }
 
 export interface CurrentAccountPersisterOutputPort extends GetCurrentAccountPersisterOutputPort, SetCurrentAccountPersisterOutputPort {}

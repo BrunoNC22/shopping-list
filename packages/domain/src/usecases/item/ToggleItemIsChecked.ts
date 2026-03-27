@@ -1,5 +1,6 @@
-import { ToggleItemIsCheckedInputPort, ToggleItemIsCheckedProps } from "../../input";
-import { GetByIdItemPersisterOutputPort, SaveItemPersisterOutputPort } from "../../output/persistance/ItemPersisterOutputPort";
+import { ToggleItemIsCheckedInputPort, ToggleItemIsCheckedProps } from "@/input"
+import { GetByIdItemPersisterOutputPort, SaveItemPersisterOutputPort } from "@/output"
+
 
 export class ToggleItemIsChecked implements ToggleItemIsCheckedInputPort {
   constructor(private readonly itemPersister: GetByIdItemPersisterOutputPort & SaveItemPersisterOutputPort) {}

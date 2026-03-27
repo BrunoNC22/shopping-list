@@ -1,11 +1,12 @@
-import type { GetItemListsInputPort } from "../../input/GetItemListsInputPort";
-import { type ItemList } from "../../models/ItemList";
-import type { GetAllItemListsPersisterOutputPort } from "../../output/persistance/ItemListPersisterOutputPort";
+import { GetItemListsInputPort, GetItemListsProps } from "@/input";
+import { ItemList } from "@/models";
+import { GetAllItemListsByUserIdOutputPort } from "@/output";
+
 
 export class GetItemLists implements GetItemListsInputPort {
-  constructor(private readonly itemListPersister: GetAllItemListsPersisterOutputPort) {}
+  constructor(private readonly itemListPersister: GetAllItemListsByUserIdOutputPort) {}
 
-  async perform(): Promise<ItemList[]> {
-    return await this.itemListPersister.getAll()
+  async perform(props: GetItemListsProps): Promise<ItemList[]> {
+    return await this.itemListPersister.getAllByUserId(props.userId)
   }
 }

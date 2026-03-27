@@ -1,6 +1,7 @@
-import type { GetItemListByItemListIdInputPort, GetItemListByItemListIdProps } from "../../input/GetItemListByItemListIdInputPort";
-import { type ItemList } from "../../models/ItemList";
-import type { GetItemListPersisterOutputPort } from "../../output/persistance/ItemListPersisterOutputPort";
+import { GetItemListByItemListIdInputPort, GetItemListByItemListIdProps } from "@/input";
+import { ItemList } from "@/models";
+import { GetItemListPersisterOutputPort } from "@/output";
+
 
 export class GetItemListByItemListId implements GetItemListByItemListIdInputPort {
   constructor(private readonly itemListPersister: GetItemListPersisterOutputPort) {}

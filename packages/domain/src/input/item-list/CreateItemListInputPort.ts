@@ -1,4 +1,5 @@
 export type CreateItemListProps = {
+  userId: string
   listName: string
 }
 

@@ -1,7 +1,7 @@
-import type { CreateItemListInputPort, CreateItemListProps,  } from "../../input/CreateItemListInputPort";
-import { ItemList } from "../../models/ItemList";
-import type { IdGeneratorOutputPort } from "../../output/id/IdGeneratorOutputPort";
-import type { SaveItemListPersisterOutputPort } from "../../output/persistance/ItemListPersisterOutputPort";
+import { CreateItemListInputPort, CreateItemListProps } from "@/input"
+import { ItemList } from "@/models"
+import { IdGeneratorOutputPort, SaveItemListPersisterOutputPort } from "@/output"
+
 
 export class CreateItemList implements CreateItemListInputPort {
   constructor(
@@ -12,7 +12,7 @@ export class CreateItemList implements CreateItemListInputPort {
   async perform(props: CreateItemListProps): Promise<void> {
     const listId = await this.idGenerator.generate()
     const createdAt = new Date()
-    const newItemList = new ItemList(listId, props.listName, [], createdAt)
+    const newItemList = new ItemList(listId, props.userId, props.listName, [], createdAt)
 
     await this.itemListPersister.save(newItemList)
   }

@@ -1,11 +1,6 @@
-import type {
-  GetItemsByCategoryInputPort,
-  GetItemsByCategoryProps,
-  ItemsByCategoryResponseItem
-} from "../../input/GetItemsByCategoryInputPort"
+import { GetItemsByCategoryInputPort, GetItemsByCategoryProps, ItemsByCategoryResponseItem } from "@/input"
+import { getByItemListIdItemPersisterOutputPort } from "@/output"
 
-import type { getByItemListIdItemPersisterOutputPort }
-from "../../output/persistance/ItemPersisterOutputPort"
 
 export class GetItemsByCategory implements GetItemsByCategoryInputPort {
 

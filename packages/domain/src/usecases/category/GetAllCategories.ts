@@ -1,6 +1,7 @@
-import type { GetAllCategoriesInputPort } from "../../input/GetAllCategoriesInputPort";
-import { Categoria } from "../../models/Categoria";
-import type { GetAllCategoriesPersisterOutputPort } from "../../output/persistance/CategoryPersisterOutputPort";
+import { GetAllCategoriesInputPort } from "@/input";
+import { Categoria } from "@/models";
+import { GetAllCategoriesPersisterOutputPort } from "@/output";
+
 
 export class GetAllCategories implements GetAllCategoriesInputPort {
   constructor(private readonly categoriesPersister: GetAllCategoriesPersisterOutputPort) {}

@@ -12,7 +12,12 @@ export interface GetByIdCategoriesPersisterOutputPort {
   getById(id: string): Promise<Categoria>
 }
 
+export interface ReplaceCategoriesPersisterOutputPort {
+  replace(categories: Categoria[]): Promise<void>
+}
+
 export interface CategoryPersisterOutputPort extends
   SaveCategoryPersisterOutputPort, 
   GetAllCategoriesPersisterOutputPort,
-  GetByIdCategoriesPersisterOutputPort {}
+  GetByIdCategoriesPersisterOutputPort,
+  ReplaceCategoriesPersisterOutputPort {}

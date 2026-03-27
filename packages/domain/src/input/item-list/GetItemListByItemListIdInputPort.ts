@@ -1,4 +1,4 @@
-import { type ItemList } from "../models/ItemList"
+import { type ItemList } from "../../models/ItemList"
 
 export type GetItemListByItemListIdProps = {
   itemListId: string

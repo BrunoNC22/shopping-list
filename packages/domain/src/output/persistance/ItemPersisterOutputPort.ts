@@ -21,7 +21,7 @@ export interface DeleteItemPersisterOutputPort {
 }
 
 export interface ReplaceItemsPersisterOutputPort {
-  replace(items: Item[]): Promise<void>
+  replace(itemListId: string, items: Item[]): Promise<void>
 }
 
 export interface ItemPersisterOutputPort extends 

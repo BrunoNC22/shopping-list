@@ -59,6 +59,7 @@ export interface SyncEventPayloadMap {
     id: string
     name: string
     createdAt: Date
+    userId: string
   }
 
   [SyncEventEnum.EDIT_ITEM_LIST]: {

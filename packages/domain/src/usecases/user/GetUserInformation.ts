@@ -1,7 +1,8 @@
 import { GetUserInformationInputPort, GetUserInformationProps } from "@/input"
+import { User } from "@/models"
 import { GetByIdUserPersisterOutputPort, UserNotFoundError, VerifyJWTServiceOutputPort } from "@/output"
 import { HandleGoogleAuthCallbackJWTPayloadDataType } from "../auth"
-import { User } from "@/models"
+
 
 
 export interface GetUserInformationPresenterOutputPort {

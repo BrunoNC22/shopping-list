@@ -1,5 +1,6 @@
-import type { DeleteItemListInputPort, DeleteItemListProps } from "../../input/DeleteItemListInputPort";
-import type { DeleteItemListPersisterOutputPort } from "../../output/persistance/ItemListPersisterOutputPort";
+import { DeleteItemListInputPort, DeleteItemListProps } from "@/input";
+import { DeleteItemListPersisterOutputPort } from "@/output";
+
 
 export class DeleteItemList implements DeleteItemListInputPort {
   constructor(private readonly itemListPersister: DeleteItemListPersisterOutputPort) {}

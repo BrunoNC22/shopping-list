@@ -1,12 +1,7 @@
-import type { CreateItemInputPort, CreateItemProps } from "../../input/CreateItemInputPort";
-import type { Categoria } from "../../models/Categoria";
-import { Item } from "../../models/Item";
-import { IdGeneratorOutputPort } from "../../output/id/IdGeneratorOutputPort";
-import type { GetByIdCategoriesPersisterOutputPort } from "../../output/persistance/CategoryPersisterOutputPort";
-import { CategoryNotFoundError } from "../../output/persistance/errors/CategoryNotFoundError";
-import { ItemListNotFoundError } from "../../output/persistance/errors/ItemListNotFoundError";
-import type { GetItemListPersisterOutputPort } from "../../output/persistance/ItemListPersisterOutputPort";
-import type { SaveItemPersisterOutputPort } from "../../output/persistance/ItemPersisterOutputPort";
+import { CreateItemInputPort, CreateItemProps } from "@/input"
+import { Categoria, Item } from "@/models"
+import { CategoryNotFoundError, GetByIdCategoriesPersisterOutputPort, GetItemListPersisterOutputPort, IdGeneratorOutputPort, ItemListNotFoundError, SaveItemPersisterOutputPort } from "@/output"
+
 
 export class CreateItem implements CreateItemInputPort {
   constructor(

@@ -1,7 +1,7 @@
-import type { CreateCategoryInputPort, CreateCategoryProps } from "../../input/CreateCategoryInputPort";
-import { Categoria } from "../../models/Categoria";
-import type { IdGeneratorOutputPort } from "../../output/id/IdGeneratorOutputPort";
-import type { SaveCategoryPersisterOutputPort } from "../../output/persistance/CategoryPersisterOutputPort";
+import { CreateCategoryInputPort, CreateCategoryProps } from "@/input"
+import { Categoria } from "@/models"
+import { IdGeneratorOutputPort, SaveCategoryPersisterOutputPort } from "@/output"
+
 
 export class CreateCategory implements CreateCategoryInputPort {
   constructor(

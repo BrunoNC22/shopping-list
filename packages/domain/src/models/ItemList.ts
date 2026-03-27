@@ -8,6 +8,7 @@ export class ItemList extends BaseModel {
 
   constructor(
     id: string,
+    readonly userId: string,
     name: string,
     items: Item[],
     createdAt: Date
