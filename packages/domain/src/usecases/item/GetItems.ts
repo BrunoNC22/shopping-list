@@ -1,14 +1,14 @@
-import { GetItemsInputPort } from "@/input";
+import { GetItemsInputPort, GetItemsProps } from "@/input";
 import { Item } from "@/models";
-import { GetAllItemsPersisterOutputPort } from "@/output";
+import { getByItemListIdItemPersisterOutputPort } from "@/output";
 
 
 export class GetItems implements GetItemsInputPort {
   constructor(
-    private readonly itemPersister: GetAllItemsPersisterOutputPort
+    private readonly itemPersister: getByItemListIdItemPersisterOutputPort
   ) {}
 
-  async perform(): Promise<Item[]> {
-    return await this.itemPersister.getAll()
+  async perform(props: GetItemsProps): Promise<Item[]> {
+    return await this.itemPersister.getByItemListId(props.itemListId)
   }
 }

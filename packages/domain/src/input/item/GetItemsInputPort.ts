@@ -1,5 +1,9 @@
 import { type Item } from "@/models/Item";
 
+export type GetItemsProps = {
+  itemListId: string
+}
+
 export interface GetItemsInputPort {
-  perform(): Promise<Item[]>
+  perform(props: GetItemsProps): Promise<Item[]>
 }
