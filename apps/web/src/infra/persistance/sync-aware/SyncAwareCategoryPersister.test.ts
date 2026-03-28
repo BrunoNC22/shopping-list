@@ -18,6 +18,10 @@ class CategoryPersisterMock implements CategoryPersisterOutputPort {
     return this.categories
   }
 
+  async replace(_: Categoria[]): Promise<void> {
+    
+  }
+
   async getById(id: string): Promise<Categoria> {
     const found = this.categories.find(c => c.id === id)
 
@@ -98,9 +102,7 @@ describe("SyncAwareCategoryPersister", () => {
     engine = new SyncEngineMock()
     idGenerator = new IdGeneratorMock()
 
-    persister = new SyncAwareCategoryPersister(
-      remote,
-      local,
+    persister = new SyncAwareCategoryPersister(local,
       queue,
       engine,
       idGenerator

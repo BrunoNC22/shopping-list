@@ -16,7 +16,7 @@ export class RemoteItemPersister implements ItemPersisterOutputPort {
 
   async getByItemListId(itemListId: string): Promise<Item[]> {
     try {
-      const remoteItems = await this.httpClient.get<RemoteItem[]>({ url: `/item-list/${itemListId}/items` })
+      const remoteItems = await this.httpClient.get<RemoteItem[]>({ url: `/item-lists/${itemListId}/items` })
       return remoteItems.map((remoteItem) => this.convertToDomainItem(remoteItem))
     } catch (e) {
       if (e instanceof NotFoundError) {

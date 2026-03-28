@@ -41,6 +41,7 @@ function createCreateItemListEvent(): AnySyncEvent {
     SyncEventEnum.CREATE_ITEM_LIST,
     {
       id: "list-1",
+      userId: "asdjas",
       name: "Groceries",
       createdAt: new Date("2024-01-01T09:00:00Z")
     },

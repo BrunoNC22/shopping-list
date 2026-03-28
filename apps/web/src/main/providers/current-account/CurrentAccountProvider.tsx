@@ -2,7 +2,7 @@ import { useCallback, useEffect, useMemo, useState, type Dispatch, type PropsWit
 import { CurrentAccountContext } from "./CurrentAccountContext"
 import { createLocalGoogleLogin } from "@/main/factories/usecases/auth/LocalGoogleLoginFactory"
 import { useNavigate, type NavigateFunction } from "react-router";
-import type { CurrentAccount, GetCurrentAccountInputPort, InitiateGoogleAuthenticationPresenterOutputPort } from "@shopping-list/domain";
+import type { GetCurrentAccountInputPort, InitiateGoogleAuthenticationPresenterOutputPort, User } from "@shopping-list/domain";
 
 type CurrentAccountProviderProps = {
   getCurrentAccount: GetCurrentAccountInputPort,
@@ -10,7 +10,7 @@ type CurrentAccountProviderProps = {
 
 class GoogleLoginPresenterAdapter implements InitiateGoogleAuthenticationPresenterOutputPort {
   constructor(
-    private readonly setCurrentAccount: Dispatch<SetStateAction<CurrentAccount | undefined>>,
+    private readonly setCurrentAccount: Dispatch<SetStateAction<User | undefined>>,
     private readonly navigate: NavigateFunction
   ) {}
 
@@ -18,19 +18,20 @@ class GoogleLoginPresenterAdapter implements InitiateGoogleAuthenticationPresent
     console.log(e)
   }
 
-  handleDefaultSuccess(currentAccount: CurrentAccount): void {
+  handleDefaultSuccess(currentAccount: User): void {
     this.setCurrentAccount(currentAccount)
     this.navigate("/listas")
   }
 
   handleUnauthorizedError(): void {
-    console.log("Usuário não autorizado pelo backend.")
-    this.navigate("/listas?usuario=não autorizei heheheheheheheheheheheheheheee")
+    console.error("Usuário não autorizado pelo backend.")
+    this.navigate("/?usuario=não autorizei heheheheheheheheheheheheheheee")
   }
 }
 
 export const CurrentAccountProvider = ({ children, getCurrentAccount }: PropsWithChildren & CurrentAccountProviderProps) => {
-  const [currentAccount, setCurrentAccountState] = useState<CurrentAccount | undefined>(undefined)
+  const [currentAccount, setCurrentAccountState] = useState<User | undefined>(undefined)
+  const [isGettingCurrentAccount, setIsGettingCurrentAccount] = useState<boolean>(true)
 
   const navigate = useNavigate()
 
@@ -46,6 +47,7 @@ export const CurrentAccountProvider = ({ children, getCurrentAccount }: PropsWit
 
   const handleGetCurrentAccount = useCallback(async () => {
     setCurrentAccountState(await getCurrentAccount.perform())
+    setIsGettingCurrentAccount(false)
   }, [getCurrentAccount])
 
   const handleLoginWithGoogle = useCallback(async () => {
@@ -58,6 +60,7 @@ export const CurrentAccountProvider = ({ children, getCurrentAccount }: PropsWit
   return (
     <CurrentAccountContext.Provider value={{
       currentAccount,
+      isGettingCurrentAccount,
       loginWithGoogle: handleLoginWithGoogle
     }}>
       {children}

@@ -49,6 +49,8 @@ function createItem(category: Categoria): Item {
   )
 }
 
+const itemListId = "item list id"
+
 function makeSut() {
   const cacheStorage = new CacheStorageMock()
   const categoryPersister = new CategoryPersisterMock()
@@ -117,7 +119,7 @@ describe("LocalItemPersisterAdapter", () => {
     const { sut, cacheStorage } = makeSut()
     const category = createCategory("c1", "Mercearia")
     const item = createItem(category)
-    await sut.replace([item])
+    await sut.replace(itemListId, [item])
     const saved = cacheStorage.data["items"] as StorageItem[]
     expect(saved.length).toBe(1)
     expect(saved[0].name).toBe("Arroz")

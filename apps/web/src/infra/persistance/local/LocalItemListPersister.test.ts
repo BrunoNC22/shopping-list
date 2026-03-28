@@ -70,7 +70,7 @@ function makeSut() {
 
 }
 
-
+const userId = "user id"
 
 describe("LocalItemListPersister", () => {
 
@@ -79,7 +79,7 @@ describe("LocalItemListPersister", () => {
     const { sut, cacheStorage, itemPersister } = makeSut()
 
     const storageLists: StorageItemList[] = [
-      { id: "1", name: "Compras", createdAt: new Date().toISOString() }
+      { id: "1", name: "Compras", createdAt: new Date().toISOString(), userId }
     ]
 
     cacheStorage.data["itemList"] = storageLists
@@ -119,8 +119,8 @@ describe("LocalItemListPersister", () => {
     const createdAt = new Date().toISOString()
 
     const storageLists: StorageItemList[] = [
-      { id: "1", name: "Lista1", createdAt },
-      { id: "2", name: "Lista2", createdAt }
+      { id: "1", name: "Lista1", createdAt, userId },
+      { id: "2", name: "Lista2", createdAt, userId }
     ]
 
     cacheStorage.data["itemList"] = storageLists
@@ -150,6 +150,7 @@ describe("LocalItemListPersister", () => {
 
     const list = new ItemList(
       "1",
+      userId,
       "Compras",
       [],
       new Date()
@@ -172,11 +173,12 @@ describe("LocalItemListPersister", () => {
     const createdAt = new Date().toISOString()
 
     cacheStorage.data["itemList"] = [
-      { id: "1", name: "Antigo", createdAt }
+      { id: "1", name: "Antigo", createdAt, userId }
     ] satisfies StorageItemList[]
 
     const updated = new ItemList(
       "1",
+      userId,
       "Novo",
       [],
       new Date(createdAt)
@@ -199,8 +201,8 @@ describe("LocalItemListPersister", () => {
     const createdAt = new Date().toISOString()
 
     cacheStorage.data["itemList"] = [
-      { id: "1", name: "Lista1", createdAt },
-      { id: "2", name: "Lista2", createdAt }
+      { id: "1", name: "Lista1", createdAt, userId },
+      { id: "2", name: "Lista2", createdAt, userId }
     ] satisfies StorageItemList[]
 
     await sut.delete("1")

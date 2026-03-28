@@ -1,11 +1,10 @@
-import { ItemList, SyncEvent, SyncEventEnum, type AddEventSyncQueueOutputPort, type IdGeneratorOutputPort, type ItemListPersisterOutputPort, type SyncEngineOutputPort } from "@shopping-list/domain"
+import { ItemList, SyncEvent, SyncEventEnum, type AddEventSyncQueueOutputPort, type GetPendingSyncQueueOutputPort, type IdGeneratorOutputPort, type ItemListPersisterOutputPort, type SyncEngineOutputPort } from "@shopping-list/domain"
 
 
 export class SyncAwareItemListPersister implements ItemListPersisterOutputPort {
   constructor(
-    private readonly remoteItemListPersister: ItemListPersisterOutputPort,
     private readonly localItemListPersister: ItemListPersisterOutputPort,
-    private readonly syncQueue: AddEventSyncQueueOutputPort,
+    private readonly syncQueue: AddEventSyncQueueOutputPort & GetPendingSyncQueueOutputPort,
     private readonly syncEngine: SyncEngineOutputPort,
     private readonly idGenerator: IdGeneratorOutputPort
   ) {}
@@ -27,19 +26,19 @@ export class SyncAwareItemListPersister implements ItemListPersisterOutputPort {
   }
 
   async get(listId: string): Promise<ItemList> {
-    if (navigator.onLine) {
-      return await this.remoteItemListPersister.get(listId)
-    }
-
     return await this.localItemListPersister.get(listId)
   }
 
   async getAll(): Promise<ItemList[]> {
-    if (navigator.onLine) {
-      return await this.remoteItemListPersister.getAll()
-    }
-
     return await this.localItemListPersister.getAll()
+  }
+
+  async getAllByUserId(userId: string): Promise<ItemList[]> {
+    return await this.localItemListPersister.getAllByUserId(userId)
+  }
+
+  async replaceByUserId(userId: string, itemLists: ItemList[]): Promise<void> {
+    await this.localItemListPersister.replaceByUserId(userId, itemLists)
   }
 
   async save(itemList: ItemList): Promise<void> {
@@ -53,7 +52,8 @@ export class SyncAwareItemListPersister implements ItemListPersisterOutputPort {
       { 
         id: itemList.id,
         name: itemList.name,
-        createdAt: itemList.createdAt
+        createdAt: itemList.createdAt,
+        userId: itemList.userId
       },
       new Date()
     )

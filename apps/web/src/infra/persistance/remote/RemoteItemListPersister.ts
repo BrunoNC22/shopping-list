@@ -32,6 +32,19 @@ export class RemoteItemListPersister implements ItemListPersisterOutputPort {
     }
   }
 
+  async getAllByUserId(): Promise<ItemList[]> {
+    try {
+      const remoteItemLists = await this.httpClient.get<RemoteItemList[]>({ url: `/item-lists` })
+      return remoteItemLists.map((remoteItemList) => this.convertToDomainItemList(remoteItemList))
+    } catch (e) {
+      throw new Error(`Unexpected error while trying to get item lists from server: ${e}`)
+    }
+  }
+
+  async replaceByUserId(): Promise<void> {
+    throw new Error("Remote item list persister do not replace items")
+  }
+
   convertToDomainItemList(remoteItemList: RemoteItemList) {
     const items = remoteItemList.items.map((remoteItem) => {
       const category = new Categoria(remoteItem.category.id, remoteItem.category.name)
@@ -39,7 +52,7 @@ export class RemoteItemListPersister implements ItemListPersisterOutputPort {
       return new Item(remoteItem.id, remoteItemList.id, remoteItem.name, remoteItem.price, remoteItem.amount, category, remoteItem.checked)
     })
 
-    return new ItemList(remoteItemList.id, remoteItemList.name, items, new Date(remoteItemList.createdAt))
+    return new ItemList(remoteItemList.id, remoteItemList.userId, remoteItemList.name, items, new Date(remoteItemList.createdAt))
   }
 
   async save(): Promise<void> {

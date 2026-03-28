@@ -1,8 +1,9 @@
-import type { CurrentAccount } from "@shopping-list/domain";
+import type { User } from "@shopping-list/domain";
 import { createContext, useContext } from "react";
 
 export interface ICurrentAccountContext {
-  currentAccount?: CurrentAccount
+  currentAccount?: User
+  isGettingCurrentAccount: boolean
   loginWithGoogle: () => void
 }
 

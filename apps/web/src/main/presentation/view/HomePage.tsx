@@ -1,8 +1,19 @@
 import { useCurrentAccount } from "@/main/providers/current-account/CurrentAccountContext";
+import { useHeader } from "@/main/providers/header/HeaderContext";
+import { useEffect } from "react";
 import { Link } from "react-router";
 
 export const HomePage = () => {
   const { currentAccount } = useCurrentAccount()
+  const { setHeaderTitle } = useHeader()
+
+  useEffect(() => {
+    setHeaderTitle("Your Shopping List")
+
+    return () => {
+      setHeaderTitle("")
+    }
+  }, [])
   return (
     <div className="bg-background text-slate-900 dark:text-slate-100 font-display transition-colors duration-300">
       <main className="pt-32 pb-20">

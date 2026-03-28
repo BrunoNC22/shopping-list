@@ -43,6 +43,7 @@ export type StorageSyncEventPayloadMap = {
     id: string
     name: string
     createdAt: string
+    userId: string
   }
 
   [SyncEventEnum.EDIT_ITEM_LIST]: {

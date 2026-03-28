@@ -1,7 +1,7 @@
 import { describe, it, expect } from "vitest"
 
 import { LocalCurrentAccountPersister } from "./LocalCurrentAccountPersister"
-import { CurrentAccount, ResourceNotFoundError, type CacheStorageOutputPort } from "@shopping-list/domain"
+import { CurrentAccount, ResourceNotFoundError, User, type CacheStorageOutputPort } from "@shopping-list/domain"
 
 
 type StorageCurrentAccount = {
@@ -117,7 +117,8 @@ describe("LocalCurrentAccountPersister", () => {
 
     const { sut, cacheStorage } = makeSut()
 
-    const account = new CurrentAccount(
+    const account = new User(
+      "useId",
       "Bruno",
       "bruno@email.com",
       "pic.png"

@@ -2,7 +2,6 @@ import { SyncEvent, SyncEventEnum, type AddEventSyncQueueOutputPort, type IdGene
 
 export class SyncAwareItemPersister implements ItemPersisterOutputPort {
   constructor(
-    private readonly remoteItemPersister: ItemPersisterOutputPort,
     private readonly localItemPersister: ItemPersisterOutputPort,
     private readonly syncQueue: AddEventSyncQueueOutputPort,
     private readonly syncEngine: SyncEngineOutputPort,
@@ -35,7 +34,6 @@ export class SyncAwareItemPersister implements ItemPersisterOutputPort {
   }
 
   async delete(itemId: string): Promise<void> {
-
     await this.localItemPersister.delete(itemId)
 
     const syncEventId = await this.idGenerator.generate()
@@ -55,46 +53,26 @@ export class SyncAwareItemPersister implements ItemPersisterOutputPort {
 
   }
 
-
-
-  async replace(items: Item[]): Promise<void> {
-    await this.localItemPersister.replace(items)
+  async replace(): Promise<void> {
+    throw new Error("SyncAwareItemPersister do not replace items")
   }
 
 
 
   async getAll(): Promise<Item[]> {
-
-    if (navigator.onLine) {
-      return await this.remoteItemPersister.getAll()
-    }
-
     return await this.localItemPersister.getAll()
-
   }
 
 
 
   async getById(id: string): Promise<Item> {
-
-    if (navigator.onLine) {
-      return await this.remoteItemPersister.getById(id)
-    }
-
     return await this.localItemPersister.getById(id)
-
   }
 
 
 
   async getByItemListId(itemListId: string): Promise<Item[]> {
-
-    if (navigator.onLine) {
-      return await this.remoteItemPersister.getByItemListId(itemListId)
-    }
-
     return await this.localItemPersister.getByItemListId(itemListId)
-
   }
 
 }

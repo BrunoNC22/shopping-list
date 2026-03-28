@@ -4,7 +4,6 @@ import { Categoria, SyncEvent, SyncEventEnum, type AddEventSyncQueueOutputPort, 
 export class SyncAwareCategoryPersister implements CategoryPersisterOutputPort {
 
   constructor(
-    private readonly remoteCategoryPersister: CategoryPersisterOutputPort,
     private readonly localCategoryPersister: CategoryPersisterOutputPort,
     private readonly syncQueue: AddEventSyncQueueOutputPort,
     private readonly syncEngine: SyncEngineOutputPort,
@@ -14,7 +13,6 @@ export class SyncAwareCategoryPersister implements CategoryPersisterOutputPort {
 
 
   async save(category: Categoria): Promise<void> {
-
     await this.localCategoryPersister.save(category)
 
     const syncEventId = await this.idGenerator.generate()
@@ -32,31 +30,20 @@ export class SyncAwareCategoryPersister implements CategoryPersisterOutputPort {
     await this.syncQueue.add(syncEvent)
 
     this.syncEngine.trigger()
-
   }
 
-
+  async replace(): Promise<void> {
+    throw new Error("SyncAwareCategoryPersister do not replace categories")
+  }
 
   async getAll(): Promise<Categoria[]> {
-
-    if (navigator.onLine) {
-      return await this.remoteCategoryPersister.getAll()
-    }
-
     return await this.localCategoryPersister.getAll()
-
   }
 
 
 
   async getById(id: string): Promise<Categoria> {
-
-    if (navigator.onLine) {
-      return await this.remoteCategoryPersister.getById(id)
-    }
-
     return await this.localCategoryPersister.getById(id)
-
   }
 
 }

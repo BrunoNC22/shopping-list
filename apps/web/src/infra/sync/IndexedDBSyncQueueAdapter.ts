@@ -154,7 +154,8 @@ export class IndexedDBSyncQueueAdapter implements SyncQueueOutputPort {
           {
             id: event.payload.id,
             name: event.payload.name,
-            createdAt: new Date(event.payload.createdAt)
+            createdAt: new Date(event.payload.createdAt),
+            userId: event.payload.userId
           },
           new Date(event.createdAt),
           event.synced
@@ -275,7 +276,8 @@ export class IndexedDBSyncQueueAdapter implements SyncQueueOutputPort {
           payload: {
             id: event.payload.id,
             name: event.payload.name,
-            createdAt: event.payload.createdAt.toISOString()
+            createdAt: event.payload.createdAt.toISOString(),
+            userId: event.payload.userId
           }
         }
       

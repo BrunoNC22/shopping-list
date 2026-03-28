@@ -1,4 +1,4 @@
-import type { CreateItemInputPort, CreateItemProps, DeleteItemInputPort, EditIntemInputPort, EditItemProps, GetItemListByItemListIdInputPort, GetItemsByCategoryInputPort, GetTotalByCategoryInputPort, GetTotalByCategoryResponseItem, Item, ItemsByCategoryResponseItem, ToggleItemIsCheckedInputPort } from "@shopping-list/domain";
+import type { CreateItemInputPort, CreateItemProps, DeleteItemInputPort, EditIntemInputPort, EditItemProps, GetItemListByItemListIdInputPort, GetItemsByCategoryInputPort, GetItemsInputPort, GetTotalByCategoryInputPort, GetTotalByCategoryResponseItem, Item, ItemsByCategoryResponseItem, ReplaceItemsInputPort, ToggleItemIsCheckedInputPort } from "@shopping-list/domain";
 import {
   useCallback,
   useEffect,
@@ -11,6 +11,8 @@ import { ShoppingListContext } from "./ShoppingListContext";
 
 type ShoppingListProviderProps = {
   getItemListByItemListId: GetItemListByItemListIdInputPort;
+  remoteGetItems: GetItemsInputPort
+  localReplaceitems: ReplaceItemsInputPort
   localGetItemListByItemListId: GetItemListByItemListIdInputPort;
   removeItem: DeleteItemInputPort;
   addItem: CreateItemInputPort;
@@ -26,6 +28,8 @@ export const ShoppingListProvider = ({
   children,
   addItem,
   getItemListByItemListId,
+  remoteGetItems,
+  localReplaceitems,
   localGetItemListByItemListId,
   removeItem,
   toggleIsChecked,
@@ -138,6 +142,12 @@ export const ShoppingListProvider = ({
     [editItem, handleGetItemListByItemListId, handleGetItemsByCategory]
   )
 
+  const syncItems = useCallback(async () => {
+      if (!listId) return
+      const remoteItems = await remoteGetItems.perform({ itemListId: listId })
+      await localReplaceitems.perform({ itemListId: listId, items: remoteItems })
+    }, [listId, remoteGetItems, localReplaceitems])
+
   useEffect(() => {
     handleGetItemListByItemListId();
     handleGetTotalByCategory()
@@ -145,18 +155,22 @@ export const ShoppingListProvider = ({
   }, []);
 
   useEffect(() => {
-    const interval = setInterval(() => {
+    const interval = setInterval(async () => {
+      await syncItems()
       if (!listId) return
-      getItemListByItemListId.perform({ itemListId: listId })
+      getItemListByItemListId
+        .perform({ itemListId: listId })
         .then(result => {
           setShoppingListName(result.name)
           setItemList(result.getItems());
         })
       
-      getItemsByCategory.perform({ itemListId: listId })
+      getItemsByCategory
+        .perform({ itemListId: listId })
         .then(result => setItemsByCategory(result))
 
-      getTotalByCategory.perform({ itemListId: listId })
+      getTotalByCategory
+        .perform({ itemListId: listId })
         .then(result => setTotalByCategory(result))
     }, 5000)
 

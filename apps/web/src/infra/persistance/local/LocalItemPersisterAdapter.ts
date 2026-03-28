@@ -11,6 +11,8 @@ export type StorageItem = {
 }
 
 export class LocalItemPersisterAdapter implements ItemPersisterOutputPort {
+  private readonly key = 'items'
+
   constructor(
     private readonly cacheStorage: SetCacheStorageOutputPort & GetCacheStorageOutputPort,
     private readonly categoryPersister: GetByIdCategoriesPersisterOutputPort & GetAllCategoriesPersisterOutputPort
@@ -26,7 +28,7 @@ export class LocalItemPersisterAdapter implements ItemPersisterOutputPort {
       receivedItems.push(this.parseItem(item))
     }
   
-    await this.cacheStorage.set('items', receivedItems)
+    await this.cacheStorage.set(this.key, receivedItems)
   }
 
   async getAll(): Promise<Item[]> {
@@ -37,10 +39,15 @@ export class LocalItemPersisterAdapter implements ItemPersisterOutputPort {
     return receivedItems.map(item => this.parseStorageItem(item, categories))
   }
 
-  async replace(items: Item[]): Promise<void> {
-    const storageItems = items.map(item => this.parseItem(item))
+  async replace(itemListId: string, items: Item[]): Promise<void> {
+    const storageItem = await this.getAllItemsOrThrow()
 
-    await this.cacheStorage.set('items', storageItems)
+    const filteredItems = storageItem.filter(storageItem => storageItem.itemListId !== itemListId)
+
+    const parsedItems = items.map(item => this.parseItem(item))
+    filteredItems.push(...parsedItems)
+
+    await this.cacheStorage.set(this.key, filteredItems)
   }
 
   async getByItemListId(itemListId: string): Promise<Item[]> {
@@ -55,7 +62,7 @@ export class LocalItemPersisterAdapter implements ItemPersisterOutputPort {
     const items = await this.getAllItemsOrThrow()
     const filteredItems = items.filter(item => item.id != itemId)
     
-    await this.cacheStorage.set('items', filteredItems)
+    await this.cacheStorage.set(this.key, filteredItems)
   }
 
   async getById(id: string): Promise<Item> {
@@ -88,7 +95,7 @@ export class LocalItemPersisterAdapter implements ItemPersisterOutputPort {
 
   private async getAllItemsOrThrow(): Promise<StorageItem[]> {
     try {
-      return await this.cacheStorage.get<StorageItem[]>('items')
+      return await this.cacheStorage.get<StorageItem[]>(this.key)
     } catch (e) {
       if (e instanceof ResourceNotFoundError) {
         return []

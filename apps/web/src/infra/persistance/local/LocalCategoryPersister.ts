@@ -22,11 +22,12 @@ const defaultItems: StorageCategory[] = [
 ]
 
 export class LocalCategoryPersister implements CategoryPersisterOutputPort {
+  private readonly key = 'categories'
 
   constructor(private readonly cacheStorage: SetCacheStorageOutputPort & GetCacheStorageOutputPort) {}
 
   async getById(id: string): Promise<Categoria> {
-    const categories = await this.cacheStorage.get<StorageCategory[]>('categories')
+    const categories = await this.cacheStorage.get<StorageCategory[]>(this.key)
 
     const foundCategorie = categories.find(category => category.id === id)
 
@@ -38,10 +39,10 @@ export class LocalCategoryPersister implements CategoryPersisterOutputPort {
   async getAll(): Promise<Categoria[]> {
     let categories: StorageCategory[]
     try {
-      categories = await this.cacheStorage.get<StorageCategory[]>('categories')
+      categories = await this.cacheStorage.get<StorageCategory[]>(this.key)
     } catch (e) {
       if (e instanceof ResourceNotFoundError) {
-        await this.cacheStorage.set('categories', defaultItems)
+        await this.cacheStorage.set(this.key, defaultItems)
         categories = defaultItems
       } else {
         throw new Error(`Erro inesperado ao obter categorias ${e}`)
@@ -51,8 +52,14 @@ export class LocalCategoryPersister implements CategoryPersisterOutputPort {
     return categories.map(storageCategory => this.parseStorageCategory(storageCategory))
   }
 
+  async replace(categories: Categoria[]): Promise<void> {
+    const storageCategories = categories.map(category => this.parseDomainCategory(category))
+
+    this.cacheStorage.set(this.key, storageCategories)
+  }
+
   async save(category: Categoria): Promise<void> {
-    const categories = await this.cacheStorage.get<StorageCategory[]>('categories')
+    const categories = await this.cacheStorage.get<StorageCategory[]>(this.key)
     const foundIndex = categories.findIndex((storageCategory) => storageCategory.id === category.id)
     
     if (foundIndex >= 0) {
@@ -61,7 +68,7 @@ export class LocalCategoryPersister implements CategoryPersisterOutputPort {
       categories.push(this.parseDomainCategory(category))
     }
 
-    await this.cacheStorage.set('categories', categories)
+    await this.cacheStorage.set(this.key, categories)
   }
 
   private parseStorageCategory(storageCategory: StorageCategory): Categoria {

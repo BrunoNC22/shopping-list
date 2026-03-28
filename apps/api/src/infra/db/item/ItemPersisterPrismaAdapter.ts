@@ -78,9 +78,8 @@ export class ItemPersisterPrismaAdapter implements ItemPersisterOutputPort {
       )
     )
   }
-
-  async replace(items: Item[]): Promise<void> {
-    throw new Error("Prisma item persister does not replace items")
+  replace(itemListId: string, items: Item[]): Promise<void> {
+    throw new Error("Prisma item persister does not replace items")  
   }
 
   async save(item: Item): Promise<void> {

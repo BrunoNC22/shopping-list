@@ -5,20 +5,31 @@ import { useDrawer } from "@/main/providers/drawer/DrawerContext";
 import { EllipsisVertical, Pen, Trash2 } from "lucide-react"
 import { CheckboxIcon } from "../checkbox/checkbox-icon";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { useHeader } from "@/main/providers/header/HeaderContext";
+import { useEffect } from "react";
 
 
 export const MobileShoppingListView = () => {
+  const { setHeaderTitle } = useHeader()
   const {
     totalValue,
     addItem,
     itemsByCategory,
     toggleIsChecked,
     removeItem,
-    editItem
+    editItem,
+    shoppingListName
   } = useShoppingList();
 
   const { openDrawer } = useDrawer()
 
+  useEffect(() => {
+    setHeaderTitle(shoppingListName)
+
+    return () => {
+      setHeaderTitle("")
+    }
+  }, [shoppingListName])
   return (
     <div className="relative flex items-center h-screen w-full flex-col text-white">
       {/* <Header headerTitle={shoppingListName} /> */}

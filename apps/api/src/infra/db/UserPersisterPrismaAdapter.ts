@@ -39,15 +39,44 @@ export class UserPersisterPrismaAdapter implements UserPersisterOutputPort {
   }
 
   async getByEmail(email: string): Promise<User> {
-    const dbUser = await this.prismaClient.user.findUnique({
-      where: {
-        email: email
-      }
-    })
+    let attempts = 0
+    const maxAttempts = 3
 
-    if (!dbUser) throw new UserNotFoundError(`User with email ${email} not found.`)
-    
-    return new User(dbUser.id, dbUser.name, dbUser.email, dbUser.profilePictureUrl)
+    while (attempts < maxAttempts) {
+      try {
+        const dbUser = await this.prismaClient.user.findUnique({
+          where: { email }
+        })
+
+        if (!dbUser) {
+          throw new UserNotFoundError(`User with email ${email} not found.`)
+        }
+
+        return new User(
+          dbUser.id,
+          dbUser.name,
+          dbUser.email,
+          dbUser.profilePictureUrl
+        )
+      } catch (error: any) {
+        const isStartupError =
+          typeof error?.message === 'string' &&
+          error.message.includes('database system is starting up')
+
+        console.log(`Error: ${error.message} attempt: ${attempts}`)
+        if (isStartupError) {
+          attempts++
+
+          await new Promise((resolve) => setTimeout(resolve, 1000 * (attempts + 1)))
+
+          continue
+        }
+
+        throw error
+      }
+    }
+
+    throw new Error("Unexpected error while trying to get user by email.")
   }
 
   async getById(id: string): Promise<User> {

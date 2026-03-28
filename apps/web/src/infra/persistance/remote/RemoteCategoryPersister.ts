@@ -25,6 +25,10 @@ export class RemoteCategoryPersister implements CategoryPersisterOutputPort {
     }
   }
 
+  async replace(): Promise<void> {
+    throw new Error("Remote category persister do not replace categories")
+  }
+
   convertToDomainCategory(remoteCategory: RemoteCategory) {
     return new Categoria(remoteCategory.id, remoteCategory.name)
   }

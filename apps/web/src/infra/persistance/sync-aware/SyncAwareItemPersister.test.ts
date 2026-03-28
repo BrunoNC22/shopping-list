@@ -17,7 +17,7 @@ class ItemPersisterMock implements ItemPersisterOutputPort {
     this.deleted.push(itemId)
   }
 
-  async replace(items: Item[]): Promise<void> {
+  async replace(_: string, items: Item[]): Promise<void> {
     this.replaced.push(items)
   }
 
@@ -128,7 +128,6 @@ describe("SyncAwareItemPersister", () => {
     idGenerator = new IdGeneratorMock()
 
     persister = new SyncAwareItemPersister(
-      remote,
       local,
       queue,
       engine,
@@ -313,18 +312,4 @@ describe("SyncAwareItemPersister", () => {
     expect(result.length).toBe(1)
 
   })
-
-
-
-  it("replace deve substituir itens localmente", async () => {
-
-    const item = createItem()
-
-    await persister.replace([item])
-
-    expect(local.replaced.length).toBe(1)
-    expect(local.replaced[0][0].id).toBe(item.id)
-
-  })
-
 })

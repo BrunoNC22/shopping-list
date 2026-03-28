@@ -3,10 +3,12 @@ import { Item, ItemList, ItemListNotFoundError, ResourceNotFoundError, type GetA
 export type StorageItemList = {
   id: string,
   name: string,
-  createdAt: string
+  createdAt: string,
+  userId: string
 }
 
 export class LocalItemListPersister implements ItemListPersisterOutputPort {
+  private key = 'itemList'
   constructor(
     private readonly cacheStorage: SetCacheStorageOutputPort & GetCacheStorageOutputPort,
     private readonly itemPersister: getByItemListIdItemPersisterOutputPort & GetAllItemsPersisterOutputPort
@@ -34,6 +36,28 @@ export class LocalItemListPersister implements ItemListPersisterOutputPort {
     })
   }
 
+  async getAllByUserId(userId: string): Promise<ItemList[]> {
+    const storageItemLists = await this.findAllOrThrow()
+    const allItems = await this.itemPersister.getAll()
+    
+    return storageItemLists
+      .filter(storageItemList => storageItemList.userId === userId)
+      .map(storageItemList => {
+        const items = allItems.filter((item) => item.itemListId === storageItemList.id)
+
+        return this.convertStorageItemListToDomain(storageItemList, items)
+      })
+  }
+
+  async replaceByUserId(userId: string, itemLists: ItemList[]): Promise<void> {
+    const storageItemLists = await this.findAllOrThrow()
+    const filteredItemLists = storageItemLists.filter(storageItemList => storageItemList.userId !== userId)
+
+    filteredItemLists.push(...itemLists.map(itemList => this.convertDomainItemListToStorage(itemList)))
+
+    await this.cacheStorage.set(this.key, filteredItemLists)
+  }
+
   async save(itemList: ItemList): Promise<void> {
     const storageItemLists = await this.findAllOrThrow()
     const foundIndex = storageItemLists.findIndex((storageItemList) => storageItemList.id === itemList.id)
@@ -44,7 +68,7 @@ export class LocalItemListPersister implements ItemListPersisterOutputPort {
       storageItemLists.push(this.convertDomainItemListToStorage(itemList))
     }
 
-    await this.cacheStorage.set('itemList', storageItemLists)
+    await this.cacheStorage.set(this.key, storageItemLists)
   }
 
   async delete(listId: string): Promise<void> {
@@ -52,24 +76,25 @@ export class LocalItemListPersister implements ItemListPersisterOutputPort {
     
     const filteredItemList = storageItemLists.filter((storageItemList) => storageItemList.id !== listId)
 
-    await this.cacheStorage.set('itemList', filteredItemList)
+    await this.cacheStorage.set(this.key, filteredItemList)
   }
 
   private convertDomainItemListToStorage(itemList: ItemList): StorageItemList {
     return {
       createdAt: itemList.createdAt.toISOString(),
       id: itemList.id,
-      name: itemList.name
+      name: itemList.name,
+      userId: itemList.userId
     }
   }
 
   private convertStorageItemListToDomain(storageItemList: StorageItemList, items: Item[]): ItemList {
-    return new ItemList(storageItemList.id, storageItemList.name, items, new Date(storageItemList.createdAt))
+    return new ItemList(storageItemList.id, storageItemList.userId, storageItemList.name, items, new Date(storageItemList.createdAt))
   }
 
   private async findAllOrThrow(): Promise<StorageItemList[]> {
     try {
-      return await this.cacheStorage.get<StorageItemList[]>('itemList')
+      return await this.cacheStorage.get<StorageItemList[]>(this.key)
     } catch (e) {
       if (e instanceof ResourceNotFoundError) {
         return []

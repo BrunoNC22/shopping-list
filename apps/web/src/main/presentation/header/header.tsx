@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { useCurrentAccount } from "@/main/providers/current-account/CurrentAccountContext"
+import { useHeader } from "@/main/providers/header/HeaderContext"
 import { ArrowLeftRight, LogOut } from "lucide-react"
 import { useMemo } from "react"
 import { Link } from "react-router"
@@ -9,7 +10,8 @@ export type HeaderProps = {
   headerTitle: string
 }
 
-export const Header = ({ headerTitle }: HeaderProps) => {
+export const Header = () => {
+  const { headerTitle } = useHeader()
   const { currentAccount } = useCurrentAccount()
   const googleLoginRedirectURI = useMemo(() => {
     return `https://accounts.google.com/o/oauth2/v2/auth?client_id=${import.meta.env.VITE_GOOGLE_PUBLIC_API_KEY}&redirect_uri=${import.meta.env.VITE_BACKEND_URL}/auth/google/redirect&response_type=code&scope=https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile`
@@ -32,8 +34,8 @@ export const Header = ({ headerTitle }: HeaderProps) => {
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <div className="flex h-10 w-10 cursor-pointer items-center justify-center rounded-full overflow-hidden">
-                {currentAccount.profilePicUrl ? (
-                  <img src={currentAccount.profilePicUrl}></img>
+                {currentAccount.profilePictureUrl ? (
+                  <img src={currentAccount.profilePictureUrl}></img>
                   ) : (
                   <span className="material-symbols-outlined text-3xl">
                     account_circle
@@ -45,8 +47,8 @@ export const Header = ({ headerTitle }: HeaderProps) => {
               <DropdownMenuLabel>
                 <div className="flex gap-2 items-center">
                   <div className="h-7 w-7 flex items-center justify-center rounded-full overflow-hidden">
-                    {currentAccount.profilePicUrl ? (
-                      <img src={currentAccount.profilePicUrl}></img>
+                    {currentAccount.profilePictureUrl ? (
+                      <img src={currentAccount.profilePictureUrl}></img>
                       ) : (
                       <span className="material-symbols-outlined text-3xl">
                         account_circle

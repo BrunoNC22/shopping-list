@@ -1,6 +1,6 @@
 import { type Item } from "@/models/Item";
 
-export type GetItemsProps = {
+export interface GetItemsProps {
   itemListId: string
 }
 

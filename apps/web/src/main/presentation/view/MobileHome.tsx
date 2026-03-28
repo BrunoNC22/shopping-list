@@ -2,13 +2,15 @@ import { Button } from "@/components/ui/button"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { useItemLists } from "@/main/providers/item-list/ItemListsContext"
 import { Calendar, Plus, ShoppingCart, Ellipsis, Pen, Trash2 } from "lucide-react"
-import { useMemo } from "react"
+import { useEffect, useMemo } from "react"
 import { Link } from "react-router"
 import { ItemListForm } from "../item-list-form/ItemListForm"
 import { useDrawer } from "@/main/providers/drawer/DrawerContext"
 import type { CreateItemListProps } from "@shopping-list/domain"
+import { useHeader } from "@/main/providers/header/HeaderContext"
 
 export const MobileHome = () => {
+  const { setHeaderTitle } = useHeader()
   const { itemLists, createItemList, deleteItemList, editItemList } = useItemLists()
   const { openDrawer } = useDrawer()
 
@@ -17,6 +19,14 @@ export const MobileHome = () => {
     month: 'short',
     year: 'numeric',
   }), [])
+
+  useEffect(() => {
+    setHeaderTitle("Listas de compras")
+
+    return () => {
+      setHeaderTitle("")
+    }
+  }, [])
 
   return (
     <div className="relative flex h-auto min-h-screen w-full flex-col text-white">

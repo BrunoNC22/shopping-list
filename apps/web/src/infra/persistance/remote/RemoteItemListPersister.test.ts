@@ -19,6 +19,8 @@ class HttpClientMock implements GetHttpClientOutputPort {
   }
 }
 
+const userId = "user id"
+
 function makeSut() {
   const httpClient = new HttpClientMock()
   const sut = new RemoteItemListPersister(httpClient)
@@ -29,6 +31,7 @@ function makeSut() {
 function createRemoteItemList(): RemoteItemList {
   return {
     id: "list1",
+    userId,
     name: "Compras",
     createdAt: "2024-01-01T00:00:00.000Z",
     items: [

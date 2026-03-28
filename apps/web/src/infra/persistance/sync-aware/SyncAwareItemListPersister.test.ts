@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach } from "vitest"
 import { SyncAwareItemListPersister } from "./SyncAwareItemListPersister"
-import { SyncEventEnum, type AddEventSyncQueueOutputPort, type AnySyncEvent, type IdGeneratorOutputPort, type ItemList, type ItemListPersisterOutputPort, type SyncEngineOutputPort } from "@shopping-list/domain"
+import { SyncEventEnum, type AddEventSyncQueueOutputPort, type AnySyncEvent, type GetPendingSyncQueueOutputPort, type IdGeneratorOutputPort, type ItemList, type ItemListPersisterOutputPort, type SyncEngineOutputPort } from "@shopping-list/domain"
 
 
 
@@ -32,16 +32,27 @@ class ItemListPersisterMock implements ItemListPersisterOutputPort {
     return this.lists
   }
 
+  async getAllByUserId(userId: string): Promise<ItemList[]> {
+    return this.lists.filter(l => l.userId === userId) 
+  }
+
+  async replaceByUserId(): Promise<void> {
+    
+  }
 }
 
 
 
-class SyncQueueMock implements AddEventSyncQueueOutputPort {
+class SyncQueueMock implements AddEventSyncQueueOutputPort, GetPendingSyncQueueOutputPort {
 
   events: AnySyncEvent[] = []
 
   async add(event: AnySyncEvent): Promise<void> {
     this.events.push(event)
+  }
+
+  async getPending(): Promise<AnySyncEvent[]> {
+    return this.events
   }
 
 }
@@ -106,7 +117,6 @@ describe("SyncAwareItemListPersister", () => {
     idGenerator = new IdGeneratorMock()
 
     persister = new SyncAwareItemListPersister(
-      remote,
       local,
       queue,
       engine,

@@ -2,7 +2,6 @@ import { ShoppingListProvider } from "@/main/providers/shopping-list/ShoppingLis
 import { CategoriesProvider } from "@/main/providers/categories/CategoriesProvider";
 import { MobileShoppingListView } from "@/main/presentation/view/MobileShoppingListView";
 import { DrawerProvider } from "@/main/providers/drawer/DrawerProvider";
-import { createSyncAwareGetAllCategories } from "../usecases/category/sync-aware/SyncAwareGetAllCategoriesFactory";
 import { createSyncAwareCreateCategory } from "../usecases/category/sync-aware/SyncAwareCreateCategoryFactory";
 import { createSyncAwareCreateItem } from "../usecases/item/sync-aware/SyncAwareCreateItemFactory";
 import { createSyncAwareEditItem } from "../usecases/item/sync-aware/SyncAwareEditItemFactory";
@@ -15,13 +14,18 @@ import { createLocalGetAllCategories } from "../usecases/category/local/LocalGet
 import { createLocalGetItemListByItemListId } from "../usecases/item-list/local/LocalGetItemListByItemListIdFactory";
 import { createLocalGetTotalByCategory } from "../usecases/item/local/LocalGetTotalByCategoryFactory";
 import { createLocalGetItemsByCategory } from "../usecases/item/local/LocalGetItemsByCategoryFactory";
+import { createRemoteGetAllCategories } from "../usecases/category/remote/RemoteGetAllCategoriesFactory";
+import { createLocalReplaceCategories } from "../usecases/category/local/LocalReplaceCategoriesFactory";
+import { createLocalReplaceItems } from "../usecases/item/local/LocalReplaceItemsFactory";
+import { createRemoteGetItems } from "../usecases/item/remote/RemoteGetItemsFactory";
 
 const CreateShoppingListView = () => {
   return (
     <CategoriesProvider 
-      getAllCategoriesUsecase={createSyncAwareGetAllCategories()}
       localGetAllCategories={createLocalGetAllCategories()}
       createCategoryUsecase={createSyncAwareCreateCategory()}
+      remoteGetAllCategoriesUsecase={createRemoteGetAllCategories()}
+      replaceCategoriesUsecase={createLocalReplaceCategories()}
     >
       <ShoppingListProvider
         addItem={createSyncAwareCreateItem()}
@@ -34,6 +38,8 @@ const CreateShoppingListView = () => {
         localGetTotalByCategory={createLocalGetTotalByCategory()}
         getItemsByCategory={createSyncAwareGetItemsByCategory()}
         localGetItemsByCategory={createLocalGetItemsByCategory()}
+        localReplaceitems={createLocalReplaceItems()}
+        remoteGetItems={createRemoteGetItems()}
       >
         <DrawerProvider>
           <MobileShoppingListView />

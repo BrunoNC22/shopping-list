@@ -1,18 +1,20 @@
 import { useCallback, useEffect, useState, type PropsWithChildren } from "react";
 import { CategoriesContext } from "./CategoriesContext";
-import type { Categoria, CreateCategoryInputPort, CreateCategoryProps, GetAllCategoriesInputPort } from "@shopping-list/domain";
+import type { Categoria, CreateCategoryInputPort, CreateCategoryProps, GetAllCategoriesInputPort, ReplaceCategoriesInputPort } from "@shopping-list/domain";
 
 type CategoriesProviderProps = {
-  getAllCategoriesUsecase: GetAllCategoriesInputPort;
+  remoteGetAllCategoriesUsecase: GetAllCategoriesInputPort;
   localGetAllCategories: GetAllCategoriesInputPort
   createCategoryUsecase: CreateCategoryInputPort
+  replaceCategoriesUsecase: ReplaceCategoriesInputPort
 };
 
 export const CategoriesProvider = ({
   children,
-  getAllCategoriesUsecase,
+  remoteGetAllCategoriesUsecase,
   localGetAllCategories,
-  createCategoryUsecase
+  createCategoryUsecase,
+  replaceCategoriesUsecase
 }: PropsWithChildren & CategoriesProviderProps) => {
   const [categories, setCategories] = useState<Categoria[] | null>(null);
   const [isLoading, setIsLoading] = useState(false)
@@ -21,12 +23,7 @@ export const CategoriesProvider = ({
     setIsLoading(true)
     setCategories(await localGetAllCategories.perform())
     setIsLoading(false)
-
-    getAllCategoriesUsecase.perform()
-      .then(result => {
-        setCategories(result)
-      })
-  }, [localGetAllCategories, getAllCategoriesUsecase]);
+  }, [localGetAllCategories, remoteGetAllCategoriesUsecase]);
 
   const handleCreateCategory = useCallback(async (props: CreateCategoryProps) => {
     const createdCategoryId = await createCategoryUsecase.perform(props)
@@ -34,16 +31,22 @@ export const CategoriesProvider = ({
     return createdCategoryId
   }, [createCategoryUsecase, getAllCategories])
 
+  const syncCategories = useCallback(async () => {
+    const remoteCategories = await remoteGetAllCategoriesUsecase.perform()
+    await replaceCategoriesUsecase.perform({ categories: remoteCategories })
+  }, [remoteGetAllCategoriesUsecase, replaceCategoriesUsecase])
+
   useEffect(() => {
+    syncCategories().then(() => {
+      getAllCategories()
+    })
     getAllCategories()
   }, [getAllCategories])
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      getAllCategoriesUsecase.perform()
-        .then(result => {
-          setCategories(result)
-        })
+    const interval = setInterval(async () => {
+      await syncCategories()
+      getAllCategories()
     }, 5000);
 
     return () => clearInterval(interval)

@@ -21,6 +21,10 @@ export class CategoryPersisterPrismaAdapter implements CategoryPersisterOutputPo
     return new Categoria(dbCategory.id, dbCategory.name)
   }
 
+  async replace(categories: Categoria[]): Promise<void> {
+    throw new Error("Prisma category persister does not replace categories")
+  }
+
   async save(category: Categoria): Promise<void> {
     await this.prismaClient.category.upsert({
       where: {
