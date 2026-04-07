@@ -5,7 +5,9 @@ export class ItemPersisterPrismaAdapter implements ItemPersisterOutputPort {
   constructor(private readonly prismaClient: PrismaClient) {}
 
   async delete(itemId: string): Promise<void> {
-      
+    await this.prismaClient.item.delete({
+      where: { id: itemId }
+    })
   }
 
   async getAll(): Promise<Item[]> {
