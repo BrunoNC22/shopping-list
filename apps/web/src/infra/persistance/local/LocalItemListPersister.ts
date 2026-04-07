@@ -1,4 +1,4 @@
-import { Item, ItemList, ItemListNotFoundError, ResourceNotFoundError, type GetAllItemsPersisterOutputPort, type getByItemListIdItemPersisterOutputPort, type GetCacheStorageOutputPort, type ItemListPersisterOutputPort, type SetCacheStorageOutputPort } from "@shopping-list/domain"
+import { Item, ItemList, ItemListNotFoundError, ResourceNotFoundError, type GetAllItemsPersisterOutputPort, type getByItemListIdItemPersisterOutputPort, type GetCacheStorageOutputPort, type ItemListPersisterOutputPort, type ReplaceItemsPersisterOutputPort, type SetCacheStorageOutputPort } from "@shopping-list/domain"
 
 export type StorageItemList = {
   id: string,
@@ -11,7 +11,7 @@ export class LocalItemListPersister implements ItemListPersisterOutputPort {
   private key = 'itemList'
   constructor(
     private readonly cacheStorage: SetCacheStorageOutputPort & GetCacheStorageOutputPort,
-    private readonly itemPersister: getByItemListIdItemPersisterOutputPort & GetAllItemsPersisterOutputPort
+    private readonly itemPersister: getByItemListIdItemPersisterOutputPort & GetAllItemsPersisterOutputPort & ReplaceItemsPersisterOutputPort
   ) {}
 
   async get(listId: string): Promise<ItemList> {
@@ -52,8 +52,13 @@ export class LocalItemListPersister implements ItemListPersisterOutputPort {
   async replaceByUserId(userId: string, itemLists: ItemList[]): Promise<void> {
     const storageItemLists = await this.findAllOrThrow()
     const filteredItemLists = storageItemLists.filter(storageItemList => storageItemList.userId !== userId)
+    const convertedItemLists = await Promise.all(itemLists.map(async itemList => {
+      await this.itemPersister.replace(itemList.id, Array.from(itemList.getItems()))
 
-    filteredItemLists.push(...itemLists.map(itemList => this.convertDomainItemListToStorage(itemList)))
+      return this.convertDomainItemListToStorage(itemList)
+    }))
+
+    filteredItemLists.push(...convertedItemLists)
 
     await this.cacheStorage.set(this.key, filteredItemLists)
   }
