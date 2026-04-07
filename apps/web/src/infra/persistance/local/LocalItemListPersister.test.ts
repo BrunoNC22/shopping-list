@@ -1,7 +1,7 @@
 import { describe, it, expect } from "vitest"
 
 import { LocalItemListPersister, type StorageItemList } from "./LocalItemListPersister"
-import { ItemList, ItemListNotFoundError, ResourceNotFoundError, type GetAllItemsPersisterOutputPort, type getByItemListIdItemPersisterOutputPort, type GetCacheStorageOutputPort, type Item, type SetCacheStorageOutputPort } from "@shopping-list/domain"
+import { ItemList, ItemListNotFoundError, ResourceNotFoundError, type GetAllItemsPersisterOutputPort, type getByItemListIdItemPersisterOutputPort, type GetCacheStorageOutputPort, type Item, type ReplaceItemsPersisterOutputPort, type SetCacheStorageOutputPort } from "@shopping-list/domain"
 
 
 
@@ -38,7 +38,7 @@ class CacheStorageMock implements GetCacheStorageOutputPort, SetCacheStorageOutp
 
 
 
-class ItemPersisterMock implements getByItemListIdItemPersisterOutputPort, GetAllItemsPersisterOutputPort {
+class ItemPersisterMock implements getByItemListIdItemPersisterOutputPort, GetAllItemsPersisterOutputPort, ReplaceItemsPersisterOutputPort {
 
   items: Item[] = []
 
@@ -52,6 +52,10 @@ class ItemPersisterMock implements getByItemListIdItemPersisterOutputPort, GetAl
 
     return this.items
 
+  }
+
+  async replace(_: string, items: Item[]): Promise<void> {
+    this.items = items
   }
 
 }
