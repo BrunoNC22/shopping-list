@@ -36,7 +36,8 @@ export const MobileHome = () => {
           {itemLists.map((itemList) => (
             <Link
               to={`/listas/${itemList.id}`}
-              key={itemList.id}
+              key={itemList.id + itemList.getItems().length + itemList.getTotalValue()}
+              data-id={`${itemList.id} ${itemList.getItems().length} ${itemList.getTotalValue()}`}
               className="group flex gap-3 items-center bg-card hover:scale-105 focus:scale-105 focus:outline-none  transition-all duration-200 rounded-lg p-3 border border-white/5 shadow-card cursor-pointer">
               <div className="size-10 shrink-0 rounded-full flex items-center justify-center bg-primary/20 text-foreground/70">
                 <ShoppingCart />

@@ -54,6 +54,7 @@ export const ItemListsProvider = ({
   const syncItemLists = useCallback(async (userId: string) => {
     const remoteItems = await remoteGetItemLists.perform({ userId })
     await localReplaceItemLists.perform({ userId, itemLists: remoteItems })
+    setItemLists(remoteItems)
   }, [remoteGetItemLists, localReplaceItemLists])
   
   useEffect(() => {
@@ -61,10 +62,10 @@ export const ItemListsProvider = ({
       navigate("/")
       console.error("Usuário não autenticado.")
     } else if (!isGettingCurrentAccount && currentAccount) {
-      syncItemLists(currentAccount.id)
       handleGetItemLists()
+      syncItemLists(currentAccount.id)
     }
-  }, [isGettingCurrentAccount])
+  }, [isGettingCurrentAccount, currentAccount])
 
   useEffect(() => {
     const interval = setInterval(async () => {
@@ -73,7 +74,6 @@ export const ItemListsProvider = ({
         return navigate("/")
       } else if (!isGettingCurrentAccount && currentAccount) {
         await syncItemLists(currentAccount.id)
-        handleGetItemLists()
       }
     }, 5000)
 
