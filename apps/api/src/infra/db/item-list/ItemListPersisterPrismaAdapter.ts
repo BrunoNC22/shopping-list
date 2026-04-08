@@ -42,7 +42,7 @@ export class ItemListPersisterPrismaAdapter implements ItemListPersisterOutputPo
         dbItemList.id,
         item.name,
         item.price,
-        item.price,
+        item.amount,
         new Categoria(
           item.category.id,
           item.category.name
@@ -70,7 +70,7 @@ export class ItemListPersisterPrismaAdapter implements ItemListPersisterOutputPo
           dbItemList.id,
           item.name,
           item.price,
-          item.price,
+          item.amount,
           new Categoria(
             item.category.id,
             item.category.name
@@ -102,7 +102,7 @@ export class ItemListPersisterPrismaAdapter implements ItemListPersisterOutputPo
           dbItemList.id,
           item.name,
           item.price,
-          item.price,
+          item.amount,
           new Categoria(
             item.category.id,
             item.category.name
