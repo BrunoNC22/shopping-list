@@ -155,6 +155,10 @@ export const ShoppingListProvider = ({
   }, []);
 
   useEffect(() => {
+    syncItems()
+  }, [listId])
+
+  useEffect(() => {
     const interval = setInterval(async () => {
       await syncItems()
       if (!listId) return
@@ -175,7 +179,7 @@ export const ShoppingListProvider = ({
     }, 5000)
 
     return () => clearInterval(interval)
-  }, [])
+  }, [listId])
   return (
     <ShoppingListContext.Provider value={{
       addItem: handleAddItem,
